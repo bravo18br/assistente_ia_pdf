@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 
@@ -21,3 +22,9 @@ Route::get('/testeAutocompletar', function () {
 Route::post('/chat-stream', [ChatController::class, 'streamChat']);
 
 Route::post('/autocomplete', [ChatController::class, 'autocomplete']);
+
+Route::post('api/chat-stream', [ChatController::class, 'streamChat']);
+Route::post('api/autocomplete', [ChatController::class, 'autocomplete']);
+Route::get('api/mensagem', function () {
+    return response()->json(['mensagem' => 'Olá do Laravel!']);
+});

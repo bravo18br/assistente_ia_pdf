@@ -298,6 +298,7 @@ class ChatController extends Controller
         Exemplo:
         Se o texto for: "A prefeitura de Araucária está planejando "
         Você deve responder: {"sugestao": "a construção de um novo parque público"}
+        adicione espaço no inicio do texto caso a mensagem enviada já nao venha com espaço no final, retornando algo como {"sugestao": " resposta"}.
 
         Agora continue o seguinte texto e retorne apenas o JSON:
 
@@ -307,7 +308,7 @@ class ChatController extends Controller
             return; // finaliza sem processar IA 
         }
 
-        $response = Ollama::agent('Você é um assistente de texto e trabalha para a prefeitura municipal de araucária. Sua tarefa é sugerir uma continuação curta para um texto iniciado, como se fosse um recurso de autocompletar.')
+        $response = Ollama::agent('Você é um assistente de texto mais inteligente do mundo e trabalha para a prefeitura municipal de araucária. Sua tarefa é sugerir uma continuação curta para um texto iniciado, como se fosse um recurso de autocompletar.')
             ->prompt($prompt)
             ->model('llama3:8b')
             ->options([
