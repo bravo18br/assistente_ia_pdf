@@ -31,7 +31,7 @@
                 <input data-ia="EXERCICIO" type="text">
 
                 <label>Data</label>
-                <input data-ia="DATA" type="text">
+                <input data-ia="DATA" data-prompt="seguir padrao brasileiro, exemplo 00/00/0000" type="text">
             </div>
 
             <div class="section">

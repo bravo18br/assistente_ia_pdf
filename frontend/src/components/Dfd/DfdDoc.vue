@@ -707,6 +707,7 @@ export default {
                 {
                     nome: 'dataPrevisao',
                     tipo: 'input',
+                    prompt: 'seguir padrão brasileiro, exemplo 00/00/0000'
                 },
                 {
                     nome: 'exercicio',
@@ -725,6 +726,7 @@ export default {
                     nome: 'grauPrioridade',
                     tipo: 'radio',
                     opcoes: [ 'Baixo', 'Médio', 'Alto', 'Altíssimo' ],
+                    prompt: 'responder com Baixo, Médio, Alto ou Altíssimo',
                 },
                 {
                     nome: 'justificativa',
@@ -902,27 +904,70 @@ export default {
             }
         },
 
-        submitForm() {
+        async submitForm() {
             console.log('Formulário Enviado:', this.formData);
             this.formFinalizado = true;
 
-            axios.post('http://localhost:8000/api/completar', this.campos)
-                .then(response => {
-                    const iaCampos = response.data.iaCampos;
-                    this.campos = { ...this.campos, ...iaCampos };
+            let reader = null;
+            let controller = new AbortController();
+            let camposEnviar = ''
+            let textoBruto = '';
+            this.definicaoCampos.forEach(campo => {
+                let linha = `${campo.nome} ${campo.prompt ? campo.prompt : ''}\n`;
+                camposEnviar += linha;
+                console.log(campo.nome);
+            });
 
-                    this.$q.notify({
-                        type: 'positive',
-                        message: 'Ia completou o documento com sucesso!'
+            const res = await fetch('http://10.200.0.84:8000/api/csrf-token', {credentials: 'include'});
+            const data = await res.json();
+            const vm = this;
+            console.log(camposEnviar);
+
+            fetch('http://10.200.0.84:8000/api/chat-stream', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': data.csrf_token
+                },
+                body: JSON.stringify({ message: 'agua', campos: camposEnviar }),
+                signal: controller.signal
+            }).then(response => {
+                reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) return;
+
+                        const chunk = decoder.decode(value, { stream: true });
+                        chunk.split('\n\n').forEach(event => {
+                            if (event.startsWith('data:')) {
+                                try {
+                                    const data = JSON.parse(event.replace('data: ', ''));
+                                    if (data.response) {
+                                        
+                                        textoBruto += data.response;
+                                        console.log(textoBruto);
+
+                                        for (const chave in vm.campos) {
+                                            const regex = new RegExp(`"${chave}"\\s*:\\s*"(.*?)(?=(?:["\\n\\r,}]|$))`);
+                                            const match = textoBruto.match(regex);
+                                            vm.campos[chave] = match ? match[1] : '';
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error('Erro ao processar chunk', e);
+                                }
+                            }
+                        });
+
+                        read(); // continua lendo
                     });
-                })
-                .catch(error => {
-                    console.error('Erro ao completar com IA:', error);
-                    this.$q.notify({
-                        type: 'negative',
-                        message: 'Erro ao usar IA para completar o documento.'
-                    })
-                })
+                }
+
+                read();
+            });
+
         },
 
         desligarForm() {
@@ -994,7 +1039,7 @@ export default {
             console.log('Formulário está ' + (newVal ? 'ligado' : 'desligado'));
         }
     },
-
+    
 };
 
 </script>
