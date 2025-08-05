@@ -1,35 +1,35 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Qual objeto sua secretaria precisa?</h2>
         <div>
             <label for="nomeobj">Nome do Objeto: </label>
             <br>
-            <input type="text" name="nomeobj" id="nomeobj" class="textoformnomeobj" placeholder="Escreva o nome do objeto . . .">
+            <input v-model="form.doObjeto" type="text" name="nomeobj" id="nomeobj" class="textoformnomeobj" placeholder="Escreva o nome do objeto . . .">
             <br><br>
         </div>
         <div  class="flex">
             <div>
                 <label for="codipm">Código do IPM: </label>
                 <br>
-                <input type="text" name="codipm" id="codipm" class="textoform" placeholder="Digite o código do IPM . . .">
+                <input v-model="form.codIpm" type="text" name="codipm" id="codipm" class="textoform" placeholder="Digite o código do IPM . . .">
             </div>
             <q-space />
             <div>
                 <label for="quantidade">Quantidade: </label>
                 <br>
-                <input type="text" name="quantidade" id="quantidade" class="textoform" placeholder="Digite a quantidade . . .">
+                <input v-model="form.qtde" type="text" name="quantidade" id="quantidade" class="textoform" placeholder="Digite a quantidade . . .">
                 <br>
             </div>
             <div>
                 <label for="vlesti">Valor Estimado: </label>
                 <br>
-                <input type="text" name="vlesti" id="vlesti" class="textoform" placeholder="Digite o total esperado . . .">
+                <input v-model="form.precoTotal" type="text" name="vlesti" id="vlesti" class="textoform" placeholder="Digite o total esperado . . .">
             </div>
             <q-space />
             <div>
                 <label for="catser">CAT SER: </label>
                 <br>
-                <input type="text" name="catser" id="catser" class="textoform" placeholder="Digite o código CAT SER . . .">
+                <input v-model="form.catSer" type="text" name="catser" id="catser" class="textoform" placeholder="Digite o código CAT SER . . .">
                 <br>
             </div>
         </div>
@@ -43,9 +43,31 @@
 
 <script>
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            form: {  }
+        }
+    },
+
+    watch:{
+        formData: {
+            immediate: true,
+            handler(newVal) {
+                this.form = { ...newVal};
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         }
     }
 }
