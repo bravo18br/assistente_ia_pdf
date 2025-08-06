@@ -57,7 +57,7 @@
                     body: JSON.stringify({ message: message}),
                     signal: controller.signal
                 }).then(response => response.json()).then(data => {
-                    const suggestion = JSON.parse(data.suggestion.response);
+                    const suggestion = data
                     const span = `<span id="suggestion" style="color: red;">${suggestion.sugestao}</span>`;
                     input.insertAdjacentHTML('beforeend', span);
                     console.log(suggestion);
@@ -80,6 +80,8 @@
                 selection.addRange(range);
 
                 input.focus();
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                destroySugestao()
             }
         });
         input.addEventListener('keypress', (e) => {
@@ -91,7 +93,7 @@
                 if (letraDigitada === primeiraLetra) {
                     console.log("igual", letraDigitada);
                     sugestao.textContent = sugestao.textContent.slice(1);
-                } else {
+                } else if (!e.key === ' ') {
                     destroySugestao()}
                 }
             }

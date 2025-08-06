@@ -195,6 +195,7 @@
                                             }
                                         });
                                     }
+                                    console.log(event)
                                 } catch (e) {
                                     console.error('Erro ao processar chunk', e);
                                 }
