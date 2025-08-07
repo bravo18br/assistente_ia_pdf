@@ -1,10 +1,10 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Por qual motivo precisa desse objeto?</h2>
         <div>
             <label for="necessidade">Necessidade Básica: </label>
             <br>
-            <textarea name="necessidade" id="necessidade" class="textoform" placeholder="Descreva e justifique a necessidade básica da solicitação do objeto . . ."></textarea>
+            <textarea v-model="form.justificaNecessidade" name="necessidade" id="necessidade" class="textoform" placeholder="Descreva e justifique a necessidade básica da solicitação do objeto . . ."></textarea>
         </div>
         <br>
         <div class="flex">
@@ -22,9 +22,31 @@
 
 <script>
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true,
+        }
+    },
+
+    data() {
+        return {
+            form: { },
+        }
+    },
+
+    watch:{
+        formData: {
+            immediate: true,
+            handler(newVal) {
+                this.form = { ...newVal};
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         },
         enviarAnterior() {
             this.$emit('prev');

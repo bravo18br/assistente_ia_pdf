@@ -6,6 +6,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         formAtual: 1,
         formData: {},
         formFinalizado: false,
+        dataAtual: null,
         toggleLigado: true,
         modoEdicaoManual: false,
         campoEditando: null,
@@ -26,31 +27,28 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             servicosId: 2,
             materiais: [
                 {
-                    id: 1,
-                    item: '',
+                    item: 1,
                     classe: '',
                     descricao: '',
                     und: '',
-                    qtde: 0,
-                    precoUnd: 0,
-                    precoTotal: 0,
+                    qtde: '0',
+                    precoUnd: '0',
                 },
             ],
             servicos: [
                 {
-                    id: 1,
-                    item: '',
+                    item: 1,
                     codIpm: '',
                     catSer: '',
                     classe: '',
                     descricao: '',
                     und: '',
-                    qtde: 0,
-                    precoUnd: 0,
-                    precoTotal: 0,
+                    qtde: '0',
+                    precoUnd: '0',
                 }
             ],
             previsaoUtilizacao: '',
+            justificativaEquipe: '',
             equipePlanejamentoUm: '',
             equipePlanejamentoDois: '',
             equipePlanejamentoTres: '',
@@ -59,6 +57,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             fiscalSubstituto: '',
             gestor: '',
             gestorSubstituto: '',
+            justificativaFiscal: '',
             nomeElaborador: '',
             nomeOrdenador: '',
         },
@@ -67,24 +66,28 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             {
                 nome: 'areaRequisitante',
                 tipo: 'input',
+                prompt: ''
             },
             {
                 nome: 'dataPrevisao',
                 tipo: 'input',
-                prompt: 'seguir padrão brasileiro, exemplo 00/00/0000'
+                prompt: 'seguir o padrão brasileiro exemplo 00/00/0000'
             },
             {
                 nome: 'exercicio',
                 label: 'Exercício',
                 tipo: 'input',
+                prompt: 'ano atual'
             },
             {
                 nome: 'responsavelSolicitacao',
                 tipo: 'input',
+                prompt: ''
             },
             {
                 nome: 'matricula',
                 tipo: 'input',
+                prompt: ''
             },
             {
                 nome: 'grauPrioridade',
@@ -95,70 +98,130 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             {
                 nome: 'justificativa',
                 tipo: 'textarea',
+                prompt: 'justificativa sobre o grau de prioridade, obrigatório quando o nível for Alto ou Altíssimo'
             },
             {
                 nome: 'doObjeto',
                 tipo: 'textarea',
+                prompt: 'Descreva o objeto'
             },
             {
                 nome: 'sugestaoModalidade',
                 tipo: 'textarea',
+                prompt: 'Indique a forma sugerida de contratação.'
             },
             {
                 nome: 'justificativaNecessidade',
                 tipo: 'textarea',
+                prompt: ''
             },
             {
                 nome: 'previsaoPca',
                 tipo: 'textarea',
+                prompt: 'Informe se a demanda consta no PCA e, se não, justifique a ausência.'
             },
             {
                 nome: 'demandasVinculadas',
                 tipo: 'textarea',
+                prompt: 'Informe se há vínculo ou dependência com outros DFDs'
+            },
+            {
+                nome: 'materiais',
+                tipo: 'tabela',
+                colunas: [
+                                { nome: 'item', tipo: 'numero', prompt: 'Identificador do item'},
+                                { nome: 'classe', tipo: 'texto', prompt: 'Classe do material'},
+                                { nome: 'descricao', tipo: 'texto', prompt: 'Descrição do material'},
+                                { nome: 'und', tipo: 'texto', prompt: 'Unidade de medida'},
+                                { nome: 'qtde', tipo: 'numero', prompt: 'Quantidade do item'},
+                                { nome: 'precoUnd', tipo: 'numero', prompt: 'Preço unitário do item'},
+                            ],
+                prompt: `devolva um array com os serviços, e para cada serviço tem que ter
+                         {"item": "", "classe": "", "descricao": "", "und": "mês, ano, dia, semana", "qtde": "", "precoUnd": ""}.
+                         o item é o identificador da linha, começando no 1 e adicionando mais 1 a cada linha.`
+            },
+            {
+                nome: 'servicos',
+                tipo: 'tabela',
+                colunas: [
+                                { nome: 'item', tipo: 'numero', prompt: 'Identificador do item'},
+                                { nome: 'codIpm', tipo: 'numero', prompt: 'Código do IPM do serviço'},
+                                { nome: 'catSer', tipo: 'numero', prompt: 'Categoria do serviço'},
+                                { nome: 'classe', tipo: 'texto', prompt: 'Classe do material'},
+                                { nome: 'descricao', tipo: 'texto', prompt: 'Descrição do material'},
+                                { nome: 'und', tipo: 'texto', prompt: 'Unidade de medida'},
+                                { nome: 'qtde', tipo: 'numero', prompt: 'Quantidade do item'},
+                                { nome: 'precoUnd', tipo: 'numero', prompt: 'Preço unitário do item'},
+                            ],
+                prompt: `devolva um array com os serviços, e para cada serviço tem que ter
+                         {"item": "", "codIpm": "", "catSer": "", "classe": "", "descricao": "", "und": "mês, ano, dia, semana", "qtde": "", "precoUnd": ""}.
+                         o item é o identificador da linha, começando no 1 e adicionando mais 1 a cada linha.`
             },
             {
                 nome: 'previsaoUtilizacao',
                 tipo: 'textarea',
+                prompt: 'Informe o prazo estimado'
             },
             {
                 nome: 'equipePlanejamentoUm',
                 tipo: 'input',
+                prompt: 'Obrigatório'
             },
             {
                 nome: 'equipePlanejamentoDois',
                 tipo: 'input',
+                prompt: 'Obrigatório caso haja um segundo participante'
             },
             {
                 nome: 'equipePlanejamentoTres',
                 tipo: 'input',
+                prompt: 'Obrigatório caso haja um terceiro participante'
             },
             {
                 nome: 'equipePlanejamentoQuatro',
                 tipo: 'input',
+                prompt: 'Obrigatório caso haja um quarto participante'
+            },
+            {
+                nome: 'justificativaEquipe',
+                tipo: 'textarea',
+                prompt: 'Descreva a competência da equipe e/ou justifique a ausência de indicação.'
             },
             {
                 nome: 'fiscal',
                 tipo: 'input',
+                prompt: 'Obrigatório'
+                
             },
             {
                 nome: 'fiscalSubstituto',
                 tipo: 'input',
+                prompt: 'Obrigatório caso haja um fiscal substituto'
             },
             {
                 nome: 'gestor',
                 tipo: 'input',
+                prompt: 'Obrigatório'
             },
             {
                 nome: 'gestorSubstituto',
                 tipo: 'input',
+                prompt: 'Obrigatório caso haja um gestor substituto'
+            },
+            {
+                nome: 'justificativaFiscal',
+                tipo: 'textarea',
+                prompt: 'Descreva a responsabilidade que deverão ter e/ou justifique a ausência caso não tenha substituto'
             },
             {
                 nome: 'nomeElaborador',
                 tipo: 'input',
+                prompt: ''
             },
             {
                 nome: 'nomeOrdenador',
                 tipo: 'input',
+                prompt: ''
             },
             
         ],
@@ -189,11 +252,28 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         formAtualComponent() {
             return this.formFinalizado ? 'BaixarPdf' : `FormPasso${this.formAtual}`;
         },
+
+        definicaoMateriais(state) {
+            return state.definicaoCampos.find(c => c.nome === 'materiais');
+        },
+
+        definicaoServicos(state) {
+            return state.definicaoCampos.find(c => c.nome === 'servicos');
+        },
     },
 
     actions: {
+        diaAtual() {
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const ano = hoje.getFullYear();
+            this.dataAtual = `${dia}/${mes}/${ano}`
+        },
+
         dicaCampo() {
-            return this.ajudaCampos[this.campoEditando?.nome] || '';
+            const nomeCampo = this.campoEditando?.nome;
+            return nomeCampo && this.ajudaCampos[nomeCampo] ? this.ajudaCampos[nomeCampo] : null;
         },
 
         getOpcoesCampo(nomeCampo) {
@@ -204,8 +284,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         adicionarLinha(tabela) {
             if(tabela === 'materiais') {
                 this.campos.materiais.push({
-                    id: this.materiaisId++,
-                    item: '',
+                    item: this.campos.materiaisId++,
                     classe: '',
                     descricao: '',
                     und: '',
@@ -215,8 +294,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
                 })
             } else if (tabela === 'servicos') {
                 this.campos.servicos.push({
-                    id: this.servicosId++,
-                    item: '',
+                    item: this.campos.servicosId++,
                     codIpm: '',
                     catSer: '',
                     classe: '',
@@ -256,23 +334,57 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             }
         },
 
+        extrairArrayObjetos(textoBruto, chave) {
+            const regexArray = new RegExp(`"${chave}"\\s*:\\s*(\\[[\\s\\S]*?\\])`, 'm');
+            const matchArray = textoBruto.match(regexArray);
+            if (!matchArray) return [];
+
+            const arrayString = matchArray[1]; // conteúdo entre colchetes
+
+            // extrair cada objeto dentro do array
+            const objetos = [];
+            const regexObjetos = /{[^{}]*}/g;
+            let objMatch;
+            while ((objMatch = regexObjetos.exec(arrayString)) !== null) {
+                objetos.push(objMatch[0]);
+            }
+
+            return objetos;
+        },
+
+        parseObjetoSimples(str) {
+            const obj = {};
+            // pega pares chave: valor em strings
+            const regexKV = /"([^"]+)"\s*:\s*"([^"]*)"/g;
+            let match;
+            while ((match = regexKV.exec(str)) !== null) {
+                obj[match[1]] = match[2];
+            }
+            return obj;
+        },
+
         async submitForm() {   
             console.log('Formulário Enviado:', this.formData);
             this.formFinalizado = true;
 
             let reader = null;
             let controller = new AbortController();
-            let camposEnviar = ''
+            let camposEnviar = '';
+            let respostas = '';
             let textoBruto = '';
             this.definicaoCampos.forEach(campo => {
-                let linha = `${campo.nome} ${campo.prompt ? campo.prompt : ''}\n`;
+                let linha = `${campo.nome}: ${campo.prompt ? campo.prompt : ''}\n`;
                 camposEnviar += linha;
-                console.log(campo.nome);
             });
+            console.log(camposEnviar);
+            
 
-            // this.message.forEach(formData =>{
-            //     let linha = `$`
-            // })
+            Object.entries(this.formData).forEach(([key, value]) => {
+                let linha = `${key}: ${value}\n`
+                respostas += linha;   
+            });
+            console.log(respostas);
+            
 
             const res = await fetch('http://10.200.0.84:8000/api/csrf-token', {credentials: 'include'});
             const data = await res.json();
@@ -285,7 +397,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': data.csrf_token
                 },
-                body: JSON.stringify({ message: 'Preencha os campos com base nessas respostas:', campos: camposEnviar }),
+                body: JSON.stringify({ message: respostas, campos: camposEnviar }),
                 signal: controller.signal
             }).then(response => {
                 reader = response.body.getReader();
@@ -306,9 +418,18 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
                                         console.log(textoBruto);
 
                                         for (const chave in vm.campos) {
-                                            const regex = new RegExp(`"${chave}"\\s*:\\s*"(.*?)(?=(?:["\\n\\r,}]|$))`);
-                                            const match = textoBruto.match(regex);
-                                            vm.campos[chave] = match ? match[1] : '';
+                                            if (chave === 'materiais' || chave === 'servicos') {
+                                                const objsStr = vm.extrairArrayObjetos(textoBruto, chave);
+                                                vm.campos[chave] = objsStr.map(vm.parseObjetoSimples);
+                                                console.log('Materiais:', vm.campos.materiais);
+                                                console.log('Servicos:', vm.campos.servicos);
+                                                console.log('Definição Serviços:', vm.definicaoServicos.colunas);
+                                                console.log('Definição Materiais:', vm.definicaoMateriais.colunas);
+                                            } else {
+                                                const regex = new RegExp(`"${chave}"\\s*:\\s*"(.*?)(?=(?:["\\n\\r}]|$))`);
+                                                const match = textoBruto.match(regex);
+                                                vm.campos[chave] = match ? match[1] : '';
+                                            }
                                         }
                                     }
                                 } catch (e) {
@@ -385,6 +506,10 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
 
         tipoRadio(campo) {
             return this.campoEditando?.nome === campo && this.campoEditando?.tipo === 'radio';
+        },
+
+        tipoTabela(campo) {
+            return this.campoEditando?.nome === campo && this.campoEditando?.tipo === 'tabela';
         }
 
     },

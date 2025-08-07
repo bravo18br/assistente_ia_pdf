@@ -1,18 +1,18 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Demandas Vinculadas?</h2>
 
 
         <div class="radio">
-            <label><input type="radio" name="vinculo">Sim</label>
+            <label><input v-model="form.existeVinculo" value="Sim" type="radio" name="vinculo">Sim</label>
             <br>
-            <label><input type="radio" name="vinculo">Não</label>
+            <label><input v-model="form.existeVinculo" value="Não" type="radio" name="vinculo">Não</label>
         </div>
 
         <div>
             <label for="">DFD XXX | 20XX:</label>
             <br>
-            <input type="text" name="previsao" id="previsao" class="textoform" placeholder="DFD Vinculado . . .">
+            <input v-model="form.demandasVinculadas" type="text" name="previsao" id="previsao" class="textoform" placeholder="DFD Vinculado . . .">
         </div>
         <br>
         <div class="flex">
@@ -30,9 +30,31 @@
 
 <script>
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            form: { }
+        }
+    },
+
+    watch: {
+        formData: {
+           immediate: true,
+            handler(newVal) {
+                this.form = { ...newVal }
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         },
         enviarAnterior() {
             this.$emit('prev');

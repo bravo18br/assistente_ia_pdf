@@ -1,21 +1,21 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Equipe De Planejamento</h2>
 
         <div>
             <p class="form">Digite os participantes da equipe:</p>
             <label for="">Participante N°1: </label>
             <br>
-            <input type="text" name="participante" id="part1" class="textoform" placeholder="Digite o nome ou código . . .">
+            <input v-model="form.equipePlanejamentoUm" type="text" name="participante" id="part1" class="textoform" placeholder="Digite o nome ou código . . .">
             <label for="">Participante N°2: </label>
             <br>
-            <input type="text" name="participante" id="part2" class="textoform" placeholder="Digite o nome ou código . . .">
+            <input v-model="form.equipePlanejamentoDois" type="text" name="participante" id="part2" class="textoform" placeholder="Digite o nome ou código . . .">
             <label for="">Participante N°3: </label>
             <br>
-            <input type="text" name="participante" id="part3" class="textoform" placeholder="Digite o nome ou código . . .">
+            <input v-model="form.equipePlanejamentoTres" type="text" name="participante" id="part3" class="textoform" placeholder="Digite o nome ou código . . .">
             <label for="">Participante N°4: </label>
             <br>
-            <input type="text" name="participante" id="part4" class="textoform" placeholder="Digite o nome ou código . . .">
+            <input v-model="form.equipePlanejamentoQuatro" type="text" name="participante" id="part4" class="textoform" placeholder="Digite o nome ou código . . .">
         </div>
         <br>
         <div class="flex">
@@ -32,9 +32,30 @@
 
 <script>
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true,
+        }
+    },
+
+    data() {
+        return {
+            form: { }
+        }
+    },
+
+    watch: {
+        formData: {
+            handler(newVal) {
+                this.form = { ...newVal }
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         },
         enviarAnterior() {
             this.$emit('prev');

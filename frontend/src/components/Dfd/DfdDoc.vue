@@ -9,12 +9,12 @@
                 </div>
             </div>
 
-            <div v-if="dfdStore.campoEditando" class="painel-ajuda">
-                <p>{{ dfdStore.dicaCampo }}</p>
+            <div v-if="dfdStore.dicaCampo()" class="painel-ajuda">
+                <p>{{ dfdStore.dicaCampo() }}</p>
             </div>
 
 
-            <div :class="['doc', { 'doc-expandido' : !dfdStore.toggleLigado }]">
+            <div :class="['doc', { 'doc-expandido' : !dfdStore.value }]">
 
                 <div class="q-ma-md">
                     <q-scroll-area class="rolagem-documento">
@@ -60,7 +60,7 @@
 
                                     <div class="borda dois-um">
                                         <h3>Data:</h3>
-                                        <p>XX/XX/XXXX</p>
+                                        <p>{{ dfdStore.dataAtual }}</p>
                                     </div>
                                 </div>
                                 
@@ -169,7 +169,7 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('demandasVinculadas')">
                                     <h2>5 Demandas Vinculadas ou Interdependentes</h2>
                                     <div v-if="dfdStore.tipoTextarea('demandasVinculadas')">
-                                        <ContentEditable v-model="campos.demandasVinculadas" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable v-model="dfdStore.campos.demandasVinculadas" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.demandasVinculadas || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -189,105 +189,35 @@
                                                     <th style="width: 10%;">Qtde</th>
                                                     <th style="width: 10%;">R$ Unt.</th>
                                                     <th style="width: 10%;">R$ Total</th>
-                                                    <th style="width: 10px;"></th>
+                                                    <th v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith('materiais_')" style="width: 10px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(linha, index) in dfdStore.campos.materiais" :key="linha.id">
+                                                <tr v-for="(linha, index) in dfdStore.campos.materiais" :key="linha.item">
 
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_item_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_item_${index}`">
+                                                    <td
+                                                        v-for="coluna in dfdStore.definicaoMateriais.colunas"
+                                                        :key="coluna.nome"
+                                                        @dblclick="dfdStore.ativarEdicaoManual(`materiais_${coluna.nome}_${index}`)"
+                                                    >
+                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_${coluna.nome}_${index}`">
                                                             <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.item"
+                                                                :type="coluna.tipo === 'numero' ? 'number' : 'text'"
+                                                                v-model="linha[coluna.nome]"
                                                                 @blur="dfdStore.encerrarEdicao"
                                                                 @keyup.enter="dfdStore.encerrarEdicao"
                                                                 autofocus
                                                             />
                                                         </template>
                                                         <template v-else>
-                                                            {{ linha.item || '1' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_classe_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_classe_${index}`">
-                                                            <ContentEditable 
-                                                                type="text"
-                                                                v-model="linha.classe"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.classe || 'XXXXXXXXXX' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_descricao_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_descricao_${index}`">
-                                                            <ContentEditable 
-                                                                v-model="linha.descricao"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.descricao || 'Lorem ipsum dolor sit amet consectetur adipisicing elit. In voluptates at, earum mollitia fuga veritatis velit fugit! Mollitia harum quod, deserunt quibusdam, maxime quaerat error, omnis pariatur officia minima dolore.' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_und_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_und_${index}`">
-                                                            <ContentEditable 
-                                                                type="text"
-                                                                v-model="linha.und"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.und || 'XXXXXX' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_qtde_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_qtde_${index}`">
-                                                            <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.qtde"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.qtde || '0' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`materiais_precoUnd_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_precoUnd_${index}`">
-                                                            <ContentEditable
-                                                                type="number" 
-                                                                v-model="linha.precoUnd"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            R${{ linha.precoUnd || '0.00' }}
+                                                            {{ linha[coluna.nome] || '—' }}
                                                         </template>
                                                     </td>
 
                                                     <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
 
-                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.includes(`_${index}`)">
-                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('materiais', index)"></q-btn>
+                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
+                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('materiais', index)" />
                                                     </td>
 
                                                 </tr>
@@ -312,135 +242,35 @@
                                                     <th rowspan="2" style="width: 10%;">Qtde</th>
                                                     <th rowspan="2" style="width: 10%;">R$ Unt.</th>
                                                     <th rowspan="2" style="width: 10%;">R$ Total</th>
-                                                    <th style="width: 10px;"></th>
+                                                    <th v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith('servicos_')" style="width: 10px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(linha, index) in dfdStore.campos.servicos" :key="linha.id" style="height: 40px;">
+                                                <tr v-for="(linha, index) in dfdStore.campos.servicos" :key="linha.item" style="height: 40px;">
 
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_item_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_item_${index}`">
+                                                    <td
+                                                        v-for="coluna in dfdStore.definicaoServicos.colunas"
+                                                        :key="coluna.nome"
+                                                        @dblclick="dfdStore.ativarEdicaoManual(`servicos_${coluna.nome}_${index}`)"
+                                                    >
+                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_${coluna.nome}_${index}`">
                                                             <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.item"
+                                                                :type="coluna.tipo === 'numero' ? 'number' : 'text'"
+                                                                v-model="linha[coluna.nome]"
                                                                 @blur="dfdStore.encerrarEdicao"
                                                                 @keyup.enter="dfdStore.encerrarEdicao"
                                                                 autofocus
                                                             />
                                                         </template>
                                                         <template v-else>
-                                                            {{ linha.item || '1' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_codIpm_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `codIpm_${index}`">
-                                                            <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.codIpm"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.codIpm || '1' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_catSer_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `catSer_${index}`">
-                                                            <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.catSer"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.catSer || '1' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_classe_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_classe_${index}`">
-                                                            <ContentEditable 
-                                                                type="text"
-                                                                v-model="linha.classe"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.classe || 'XXXXXXXXXX' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_descricao_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_descricao_${index}`">
-                                                            <ContentEditable 
-                                                                v-model="linha.descricao"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.descricao || 'Lorem ipsum dolor sit amet consectetur adipisicing elit. In voluptates at, earum mollitia fuga veritatis velit fugit! Mollitia harum quod, deserunt quibusdam, maxime quaerat error, omnis pariatur officia minima dolore.' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_und_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_und_${index}`">
-                                                            <ContentEditable 
-                                                                type="text"
-                                                                v-model="linha.und"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.und || 'XXXXXX' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_qtde_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_qtde_${index}`">
-                                                            <ContentEditable 
-                                                                type="number"
-                                                                v-model="linha.qtde"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ linha.qtde || '0' }}
-                                                        </template>
-                                                    </td>
-
-                                                    <td @dblclick="dfdStore.ativarEdicaoManual(`servicos_precoUnd_${index}`)">
-                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_precoUnd_${index}`">
-                                                            <ContentEditable
-                                                                type="number" 
-                                                                v-model="linha.precoUnd"
-                                                                @blur="dfdStore.encerrarEdicao"
-                                                                @keyup.enter="dfdStore.encerrarEdicao"
-                                                                autofocus
-                                                            />
-                                                        </template>
-                                                        <template v-else>
-                                                            R${{ linha.precoUnd || '0.00' }}
+                                                            {{ linha[coluna.nome] || '—' }}
                                                         </template>
                                                     </td>
 
                                                     <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
 
-                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith(`servicos_`) && dfdStore.campoEditando?.nome?.includes(`_${index}`)">
-                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('servicos', index)"></q-btn>
+                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
+                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('servicos', index)" />
                                                     </td>
 
                                                 </tr>
@@ -502,7 +332,14 @@
                                             </div>
                                         </div>
                                     </ul>
-                                    <p>Os servidores indicados possuem formação e expertise necessários ao correto planejamento da presente contratação</p>
+                                    <div @dblclick="dfdStore.ativarEdicaoManual('justificativaEquipe')">
+                                        <div v-if="dfdStore.tipoTextarea('justificativaEquipe')">
+                                            <ContentEditable v-model="dfdStore.campos.justificativaEquipe" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.justificativaEquipe || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div>
@@ -546,7 +383,7 @@
                                         
                                         <div class="fiscal">
                                             <h3>Gestor Substituto:</h3>
-                                            <div @dblclick="ativarEdicaoManual('gestorSubstituto')">
+                                            <div @dblclick="dfdStore.ativarEdicaoManual('gestorSubstituto')">
                                                 <div v-if="dfdStore.tipoInput('gestorSubstituto')">
                                                     <ContentEditable v-model="dfdStore.campos.gestorSubstituto" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
                                                 </div>
@@ -559,7 +396,14 @@
 
                                     <div class="textoponto">
                                         <h2>9.<span class="posponto">1</span> Justificativa</h2>
-                                        <p>Os servidores indicados são responsáveis por acompanhar a execução contratual, realizar o recebimento provisório e atestar o recebimento definitivo dos bens/serviços.</p><br>
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('justificativaFiscal')">
+                                            <div v-if="dfdStore.tipoTextarea('justificativaFiscal')">
+                                                <ContentEditable v-model="dfdStore.campos.justificativaFiscal" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            </div>
+                                            <div v-else>
+                                                <p>{{ dfdStore.campos.justificativaFiscal || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                            </div>
+                                        </div>
                                         <div class="fiscal">
                                             <p><strong>Elaborado por:</strong></p>
                                             <p><strong>Ordenador de Despesa:</strong></p>
@@ -613,11 +457,20 @@
             </div>
             <div id="form" v-if="dfdStore.value">
                 <div style="flex-grow: 1;">
-                    <component :is="dfdStore.formFinalizado ? formComponents.finalizado : formComponents[dfdStore.formAtual]"
-                               :formData="dfdStore.formData" 
-                               @next="dfdStore.proximo" 
-                               @prev="dfdStore.anterior">
-                    </component>
+                    <template v-if="!dfdStore.formFinalizado">
+                        <component :is="formComponents[dfdStore.formAtual]"
+                                   :formData="dfdStore.formData"
+                                   @next="dfdStore.proximo"
+                                   @prev="dfdStore.anterior">
+                        </component>
+                    </template>
+
+                    <template v-else>
+                        <component 
+                            :is="formComponents.finalizado"
+                            :formData="dfdStore.formData"
+                        />
+                    </template>
                 </div>
                 
                 <div style="text-align: center;">
@@ -642,6 +495,7 @@ import FormPasso5 from './FormPasso5.vue';
 import FormPasso6 from './FormPasso6.vue';
 import { useDfdDocStore } from '@/stores/DfdDocStore';
 import { watch } from 'vue';
+import { onMounted } from 'vue';
 
     const dfdStore = useDfdDocStore()
 
@@ -654,6 +508,10 @@ import { watch } from 'vue';
         6: FormPasso6,
         finalizado: BaixarPdf
     }
+
+    onMounted(() => {
+        dfdStore.diaAtual();
+    })
 
     watch(() => [dfdStore.toggleLigado, dfdStore.value], ([toggleLigado, value]) => {
         if (toggleLigado && value) {
@@ -680,13 +538,13 @@ import { watch } from 'vue';
  .doc {
     flex: 1 1 60%;
     display: flex;
-    justify-content: column;
+    justify-content: center;
     border-right: 1px solid #ccc;
     transition: flex 0.5s ease, margin 0.5s ease;
  }
 
  .doc-expandido {
-    flex: 1 1 100%;
+    flex: 1 1 80%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -864,7 +722,7 @@ import { watch } from 'vue';
     line-height: 1.5;
     letter-spacing: .005mm;
     margin-bottom: 1mm;
-    text-indent: 2.0em;
+    text-indent: 3em;
 }
 
 .textoponto h2::first-letter {
