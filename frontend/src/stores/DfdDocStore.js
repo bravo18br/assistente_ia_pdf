@@ -113,7 +113,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             {
                 nome: 'justificativaNecessidade',
                 tipo: 'textarea',
-                prompt: ''
+                prompt: 'justificativa do por quê precisa do objeto'
             },
             {
                 nome: 'previsaoPca',
@@ -279,6 +279,11 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         getOpcoesCampo(nomeCampo) {
             const campo = this.definicaoCampos.find(c => c.nome === nomeCampo);
             return campo && campo.opcoes ? campo.opcoes : [];
+        },
+
+        getPromptCampo: (state) => (nome) => {
+            const campo = state.definicaoCampos.find(c => c.nome === nome)
+            return campo?.prompt || ''
         },
 
         adicionarLinha(tabela) {

@@ -31,7 +31,13 @@
                                     <div class="borda dois" @dblclick="dfdStore.ativarEdicaoManual('areaRequisitante')">
                                         <label><h3>Área Requisitante:</h3></label>
                                         <div v-if="dfdStore.tipoInput('areaRequisitante')">
-                                            <ContentEditable v-model="dfdStore.campos.areaRequisitante" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.areaRequisitante"
+                                                :prompt="dfdStore.getPromptCampo('areaRequisitante')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{  dfdStore.campos.areaRequisitante || 'XXXXXXXXX' }}</p>
@@ -41,7 +47,13 @@
                                     <div class="borda dois-um" @dblclick="dfdStore.ativarEdicaoManual('dataPrevisao')">
                                         <label><h3>Data Previsão:</h3></label>
                                         <div v-if="dfdStore.tipoInput('dataPrevisao')">
-                                            <ContentEditable v-model="dfdStore.campos.dataPrevisao" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.dataPrevisao"
+                                                :prompt="dfdStore.getPromptCampo('dataPrevisao')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.dataPrevisao || 'XX/XXXX' }}</p>
@@ -51,7 +63,13 @@
                                     <div class="borda dois-um" @dblclick="dfdStore.ativarEdicaoManual('exercicio')">
                                         <label><h3>Exercício:</h3></label>
                                         <div v-if="dfdStore.tipoInput('exercicio')">
-                                            <ContentEditable v-model="dfdStore.campos.exercicio" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.exercicio" 
+                                                :prompt="dfdStore.getPromptCampo('exercicio')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.exercicio || 'XXXX' }}</p>
@@ -68,7 +86,13 @@
                                     <div class="borda tres-um" @dblclick="dfdStore.ativarEdicaoManual('responsavelSolicitacao')">
                                         <label><h3>Responsável pela Solicitação:</h3></label>
                                         <div v-if="dfdStore.tipoInput('responsavelSolicitacao')">
-                                            <ContentEditable v-model="dfdStore.campos.responsavelSolicitacao" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.responsavelSolicitacao" 
+                                                :prompt="dfdStore.getPromptCampo('responsavelSolicitacao')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.responsavelSolicitacao || 'XXXXXXXXXXXXXXX XXXXX XXXXXXX' }}</p>
@@ -78,7 +102,13 @@
                                     <div class="borda tres-dois" @dblclick="dfdStore.ativarEdicaoManual('matricula')">
                                         <label><h3>Matrícula:</h3></label>
                                         <div v-if="dfdStore.tipoInput('matricula')">
-                                            <ContentEditable v-model="dfdStore.campos.matricula" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.matricula"
+                                                :prompt="dfdStore.getPromptCampo('matricula')" 
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.matricula || 'XXXXX' }}</p>
@@ -118,7 +148,13 @@
                                     <div @dblclick="dfdStore.ativarEdicaoManual('justificativa')">
                                         <label><h3>Justificativa:</h3></label>
                                         <div v-if="dfdStore.tipoTextarea('justificativa')">
-                                            <ContentEditable v-model="dfdStore.campos.justificativa" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.justificativa" 
+                                                :prompt="dfdStore.getPromptCampo('justificativa')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.justificativa || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -129,7 +165,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('doObjeto')">
                                     <label><h2>1 Do Objeto</h2></label>
                                     <div v-if="dfdStore.tipoTextarea('doObjeto')">
-                                        <ContentEditable v-model="dfdStore.campos.doObjeto" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.doObjeto" 
+                                            :prompt="dfdStore.getPromptCampo('doObjeto')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.doObjeto || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -139,7 +181,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('sugestaoModalidade')">
                                     <label><h2>2 Da Sugestão De Modalidade</h2></label>
                                     <div v-if="dfdStore.tipoTextarea('sugestaoModalidade')">
-                                        <ContentEditable v-model="dfdStore.campos.sugestaoModalidade" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.sugestaoModalidade"
+                                            :prompt="dfdStore.getPromptCampo('sugestaoModalidade')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.sugestaoModalidade || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -149,7 +197,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('justificativaNecessidade')">
                                     <h2>3 Justificativa Da Necessidade</h2>
                                     <div v-if="dfdStore.tipoTextarea('justificativaNecessidade')">
-                                        <ContentEditable v-model="dfdStore.campos.justificativaNecessidade" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.justificativaNecessidade" 
+                                            :prompt="dfdStore.getPromptCampo('justificativaNecessidade')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.justificativaNecessidade || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -159,7 +213,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('previsaoPca')">
                                     <h2>4 Previsão Da Demanda No Pca</h2>
                                     <div v-if="dfdStore.tipoTextarea('previsaoPca')">
-                                        <ContentEditable v-model="dfdStore.campos.previsaoPca" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.previsaoPca" 
+                                            :prompt="dfdStore.getPromptCampo('previsaoPca')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.previsaoPca || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -169,7 +229,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('demandasVinculadas')">
                                     <h2>5 Demandas Vinculadas ou Interdependentes</h2>
                                     <div v-if="dfdStore.tipoTextarea('demandasVinculadas')">
-                                        <ContentEditable v-model="dfdStore.campos.demandasVinculadas" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.demandasVinculadas"
+                                            :prompt="dfdStore.getPromptCampo('demandasVinculadas')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.demandasVinculadas || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -285,7 +351,13 @@
                                 <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('previsaoUtilizacao')">
                                     <h2>7 Previsão de Utilização E Critérios De Aceitação</h2>
                                     <div v-if="dfdStore.tipoTextarea('previsaoUtilizacao')">
-                                        <ContentEditable v-model="dfdStore.campos.previsaoUtilizacao" @input="dfdStore.sugerirCampoDebounced('previsaoUtilizacao', dfdStore.campos.previsaoUtilizacao)" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.previsaoUtilizacao" 
+                                            :prompt="dfdStore.getPromptCampo('previsaoUtilizacao')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
                                     </div>
                                     <div v-else>
                                         <p>{{ dfdStore.campos.previsaoUtilizacao || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -298,7 +370,13 @@
                                     <ul>
                                         <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoUm')">
                                             <div v-if="dfdStore.tipoInput('equipePlanejamentoUm')">
-                                                <ContentEditable v-model="dfdStore.campos.equipePlanejamentoUm" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoUm"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoUm')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
                                             </div>
                                             <div v-else>
                                                 <li>{{ dfdStore.campos.equipePlanejamentoUm || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
@@ -307,7 +385,13 @@
 
                                         <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoDois')">
                                             <div v-if="dfdStore.tipoInput('equipePlanejamentoDois')">
-                                                <ContentEditable v-model="dfdStore.campos.equipePlanejamentoDois" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoDois"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoDois')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
                                             </div>
                                             <div v-else>
                                                 <li>{{ dfdStore.campos.equipePlanejamentoDois || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
@@ -316,7 +400,13 @@
 
                                         <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoTres')">
                                             <div v-if="dfdStore.tipoInput('equipePlanejamentoTres')">
-                                                <ContentEditable v-model="dfdStore.campos.equipePlanejamentoTres" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoTres"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoTres')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
                                             </div>
                                             <div v-else>
                                                 <li>{{ dfdStore.campos.equipePlanejamentoTres || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
@@ -325,7 +415,13 @@
 
                                         <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoQuatro')">
                                             <div v-if="dfdStore.tipoInput('equipePlanejamentoQuatro')">
-                                                <ContentEditable v-model="dfdStore.campos.equipePlanejamentoQuatro" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoQuatro" 
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoQuatro')"
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
                                             </div>
                                             <div v-else>
                                                 <li>{{ dfdStore.campos.equipePlanejamentoQuatro || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
@@ -334,7 +430,13 @@
                                     </ul>
                                     <div @dblclick="dfdStore.ativarEdicaoManual('justificativaEquipe')">
                                         <div v-if="dfdStore.tipoTextarea('justificativaEquipe')">
-                                            <ContentEditable v-model="dfdStore.campos.justificativaEquipe" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.justificativaEquipe"
+                                                :prompt="dfdStore.getPromptCampo('justificativaEquipe')" 
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
                                         </div>
                                         <div v-else>
                                             <p>{{ dfdStore.campos.justificativaEquipe || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -349,7 +451,13 @@
                                             <h3>Fiscal:</h3>
                                             <div @dblclick="dfdStore.ativarEdicaoManual('fiscal')">
                                                 <div v-if="dfdStore.tipoInput('fiscal')">
-                                                    <ContentEditable v-model="dfdStore.campos.fiscal" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.fiscal" 
+                                                        :prompt="dfdStore.getPromptCampo('fiscal')"
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
                                                 </div>
                                                 <div v-else>
                                                     <p>{{ dfdStore.campos.fiscal || 'XXXXXXXX XXXXX XXXXXX' }}</p>
@@ -361,7 +469,13 @@
                                             <h3>Fiscal Substituto:</h3>
                                             <div @dblclick="dfdStore.ativarEdicaoManual('fiscalSubstituto')">
                                                 <div v-if="dfdStore.tipoInput('fiscalSubstituto')">
-                                                    <ContentEditable v-model="dfdStore.campos.fiscalSubstituto" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.fiscalSubstituto"
+                                                        :prompt="dfdStore.getPromptCampo('fiscalSubstituto')" 
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
                                                 </div>
                                                 <div v-else>
                                                     <p>{{ dfdStore.campos.fiscalSubstituto || 'XXXXXXXX XXXXX XXXXXX' }}</p>
@@ -373,7 +487,13 @@
                                             <h3>Gestor:</h3>
                                             <div @dblclick="dfdStore.ativarEdicaoManual('gestor')">
                                                 <div v-if="dfdStore.tipoInput('gestor')">
-                                                    <ContentEditable v-model="dfdStore.campos.gestor" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.gestor" 
+                                                        :prompt="dfdStore.getPromptCampo('gestor')"
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
                                                 </div>
                                                 <div v-else>
                                                     <p>{{ dfdStore.campos.gestor || 'XXXXXXXX XXXXX XXXXXX' }}</p>
@@ -385,7 +505,13 @@
                                             <h3>Gestor Substituto:</h3>
                                             <div @dblclick="dfdStore.ativarEdicaoManual('gestorSubstituto')">
                                                 <div v-if="dfdStore.tipoInput('gestorSubstituto')">
-                                                    <ContentEditable v-model="dfdStore.campos.gestorSubstituto" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.gestorSubstituto"
+                                                        :prompt="dfdStore.getPromptCampo('gestorSubstituto')" 
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
                                                 </div>
                                                 <div v-else>
                                                     <p>{{ dfdStore.campos.gestorSubstituto || 'XXXXXXXX XXXXX XXXXXX' }}</p>
@@ -398,7 +524,13 @@
                                         <h2>9.<span class="posponto">1</span> Justificativa</h2>
                                         <div @dblclick="dfdStore.ativarEdicaoManual('justificativaFiscal')">
                                             <div v-if="dfdStore.tipoTextarea('justificativaFiscal')">
-                                                <ContentEditable v-model="dfdStore.campos.justificativaFiscal" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.justificativaFiscal"
+                                                    :prompt="dfdStore.getPromptCampo('justificativaFiscal')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
                                             </div>
                                             <div v-else>
                                                 <p>{{ dfdStore.campos.justificativaFiscal || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
@@ -414,7 +546,13 @@
                                             <div style="width: 40%; border-top: 1px solid black;">
                                                 <div @dblclick="dfdStore.ativarEdicaoManual('nomeElaborador')">
                                                     <div v-if="dfdStore.tipoInput('nomeElaborador')">
-                                                        <ContentEditable v-model="dfdStore.campos.nomeElaborador" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                        <ContentEditable 
+                                                            v-model="dfdStore.campos.nomeElaborador" 
+                                                            :prompt="dfdStore.getPromptCampo('nomeElaborador')"
+                                                            @blur="dfdStore.encerrarEdicao()" 
+                                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                            autofocus 
+                                                        />
                                                     </div>
                                                     <div v-else>
                                                         <p>{{ dfdStore.campos.nomeElaborador || 'XXXXXXXX XXXXX XXX XXXXXX' }}</p>
@@ -428,7 +566,13 @@
                                             <div style="width: 40%; border-top: 1px solid black;">
                                                 <div @dblclick="dfdStore.ativarEdicaoManual('nomeOrdenador')">
                                                     <div v-if="dfdStore.tipoInput('nomeOrdenador')">
-                                                        <ContentEditable v-model="dfdStore.campos.nomeOrdenador" @blur="dfdStore.encerrarEdicao()" @keyup.enter="dfdStore.encerrarEdicao()" autofocus />
+                                                        <ContentEditable 
+                                                            v-model="dfdStore.campos.nomeOrdenador"
+                                                            :prompt="dfdStore.getPromptCampo('nomeOrdenador')" 
+                                                            @blur="dfdStore.encerrarEdicao()"
+                                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                            autofocus 
+                                                        />
                                                     </div>
                                                     <div v-else>
                                                         <p>{{ dfdStore.campos.nomeOrdenador || 'XXXXXXXX XXXXX XXX XXXXXX' }}</p>
