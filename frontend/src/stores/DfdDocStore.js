@@ -10,6 +10,8 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         toggleLigado: true,
         modoEdicaoManual: false,
         campoEditando: null,
+        mostrarPdf: false,
+        Documento: null,
         campos: {
             areaRequisitante: '',
             dataPrevisao: '',
@@ -260,6 +262,7 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
         definicaoServicos(state) {
             return state.definicaoCampos.find(c => c.nome === 'servicos');
         },
+
     },
 
     actions: {
@@ -337,6 +340,105 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             if (this.formAtual > 1) {
                 this.formAtual--;
             }
+        },
+
+        pegarHtml() {
+           if (!this.Documento) {
+            console.error('Documento ainda não definido');
+           }
+           
+            const html = this.Documento.innerHTML;
+            console.log(html);
+            return html;
+        },
+
+        getComputedStyles(element) {
+            let css = '';
+
+            function getUniqueSelector(el) {
+                if (el.id) {
+                return `#${el.id}`;
+                }
+                if (el.className && typeof el.className === 'string' && el.className.trim() !== '') {
+                return `${el.tagName.toLowerCase()}.${el.className.trim().replace(/\s+/g, '.')}`;
+                }
+                return el.tagName.toLowerCase();
+            }
+
+            function getNthChildIndex(el) {
+                let i = 1;
+                let sibling = el.previousElementSibling;
+                while (sibling) {
+                i++;
+                sibling = sibling.previousElementSibling;
+                }
+                return i;
+            }
+
+            function buildSelectorPath(el) {
+                let path = [];
+                while (el && el.nodeType === 1 && el !== document) {
+                let selector = getUniqueSelector(el);
+                if (!el.id && (!el.className || el.className.trim() === '')) {
+                    selector += `:nth-child(${getNthChildIndex(el)})`;
+                }
+                path.unshift(selector);
+                el = el.parentElement;
+                }
+                return path.join(' > ');
+            }
+
+            function processElement(el) {
+                const selector = buildSelectorPath(el);
+                const styles = window.getComputedStyle(el);
+                let styleText = '';
+                for (let i = 0; i < styles.length; i++) {
+                const prop = styles[i];
+                const val = styles.getPropertyValue(prop);
+                styleText += `${prop}: ${val}; `;
+                }
+                css += `${selector} { ${styleText} }\n`;
+
+                for (const child of el.children) {
+                processElement(child);
+                }
+            }
+
+        processElement(element);
+        console.log(css);
+        return css;
+        },
+
+        htmlFetch(html, cssText) {
+            fetch('http://10.200.0.84:8000/api/gerarpdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ html: html, css: cssText }), // ou o que precisar enviar
+            })
+            .then(res => {
+            if (!res.ok) throw new Error('Erro ao buscar PDF');
+            return res.blob(); // pega o PDF como Blob
+            })
+            .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            window.open(url); // abre em nova aba o PDF
+            // ou pode usar iframe, link para download, etc
+            })
+            .catch(console.error);
+        },
+
+        gerarPdf() {
+            const html = this.pegarHtml();
+            if (!html) {
+                console.error('HTML não encontrado.');
+                return;
+            }
+
+            const element = this.Documento;
+            const cssText = element ? this.getComputedStyles(element) : '';
+            this.htmlFetch(html, cssText);
         },
 
         extrairArrayObjetos(textoBruto, chave) {
@@ -459,10 +561,9 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
             }
         },
 
-        botaoEditar() {
-            this.toggleLigado = false;
-            this.value = false;
-            this.modoEdicaoManual = true;
+        voltarParaFormulario() {
+            this.value = true;
+            this.modoEdicaoManual = false;
         },
 
         ativarEdicaoManual(campo) {

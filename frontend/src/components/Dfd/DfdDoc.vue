@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="break-inside: avoid;">
         <div id="container">
             <div id="voltar">
                 <div>
@@ -19,8 +19,8 @@
                 <div class="q-ma-md">
                     <q-scroll-area class="rolagem-documento">
                     <div class="q-py-xs">
-                        <div id="documento">
-                            <div id="pag">
+                        <div id="documento" ref="Documento">
+                            <div id="pag" >
 
                                 <div class="borda">
                                     <h1>DOCUMENTO DE FORMALIZAÇÃO DE DEMANDA</h1>
@@ -596,9 +596,27 @@
                     <div class="q-pa-md">
                         <q-toggle v-model="dfdStore.value" color="purple-14" class="tamanhotg" />
                     </div>
+
+                    <div v-if="!dfdStore.value">
+                        <div class="btnFinalizar">
+                            <q-btn label="Salvar" id="finalizar" class="shadow-4" @click="() => {
+                                dfdStore.formFinalizado = true
+                                dfdStore.mostrarPdf = true
+                                dfdStore.value = true
+                            }"  />
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div v-if="dfdStore.modoEdicaoManual">
+                    <div class="btnConcluir">
+                        <q-btn label="Concluir" id="concluir" @click="dfdStore.voltarParaFormulario" />
+                    </div>
                 </div>
 
             </div>
+
             <div id="form" v-if="dfdStore.value">
                 <div style="flex-grow: 1;">
                     <template v-if="!dfdStore.formFinalizado">
@@ -607,6 +625,10 @@
                                    @next="dfdStore.proximo"
                                    @prev="dfdStore.anterior">
                         </component>
+                    </template>
+                    
+                    <template v-else-if="dfdStore.mostrarPdf">
+                        <BaixarPdf />
                     </template>
 
                     <template v-else>
@@ -620,10 +642,11 @@
                 <div style="text-align: center;">
                     <p>Você pode também editar manualmente! (Isso vai desativar o formulário de I.A.)</p>
                 </div>
-                <div class="btnedit" @click="dfdStore.botaoEditar()">
+                <div class="btnedit" @click="dfdStore.desligarFormulario()">
                     <q-btn id="editar" label="EDITAR DOCUMENTO" class="shadow-4"></q-btn>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -639,8 +662,9 @@ import FormPasso5 from './FormPasso5.vue';
 import FormPasso6 from './FormPasso6.vue';
 import { useDfdDocStore } from '@/stores/DfdDocStore';
 import { watch } from 'vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
+    const Documento = ref(null)
     const dfdStore = useDfdDocStore()
 
     const formComponents = {
@@ -655,6 +679,10 @@ import { onMounted } from 'vue';
 
     onMounted(() => {
         dfdStore.diaAtual();
+
+        dfdStore.Documento = Documento.value
+        console.log(Documento.value);
+            
     })
 
     watch(() => [dfdStore.toggleLigado, dfdStore.value], ([toggleLigado, value]) => {
@@ -992,6 +1020,41 @@ li {
     font-size: 0.9em;
     color: #333;
     z-index: 1000;
+}
+
+.btnFinalizar {
+    margin-top: 75vh;
+}
+
+#finalizar {
+    transform: translateY(-50%);
+    width: 8vw;
+    height: 6vh;
+    padding: 10px;
+    background-color: rgb(180, 2, 180);
+    color: #fff;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 20mm;
+}
+
+.btnConcluir {
+    margin-top: 90vh;
+    margin-left: 5vw;
+}
+
+#concluir {
+    transform: translateY(-50%);
+    width: 8vw;
+    height: 6vh;
+    padding: 10px;
+    background-color: rgb(180, 2, 180);
+    color: #fff;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 20mm;
 }
 
 

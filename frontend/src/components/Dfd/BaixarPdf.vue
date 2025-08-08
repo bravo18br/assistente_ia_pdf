@@ -7,18 +7,24 @@
     </div>
     <br><br>
     <div class="btn">
-        <q-btn id="baixar" class="shadow-4">BAIXAR PDF</q-btn>
+        <q-btn id="baixar" class="shadow-4" @click="dfdStore.gerarPdf()">BAIXAR PDF</q-btn>
     </div>
 </template>
 
 <script>
+import { useDfdDocStore } from '@/stores/DfdDocStore';
 export default {
     props: { 
         formData: {
             type: Object,
-            required: true,
+            required: false,
         }
     },
+    data() {
+        return {
+            dfdStore: useDfdDocStore()
+        }
+    }
 }
 </script>
 
