@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import PaginaInicial from '../views/PaginaInicial.vue'
 
+import LoginLayout from '@/layouts/LoginLayout.vue'
+import TelaLogin from '../views/TelaLogin.vue'
+
 import LayoutDocumento from '@/layouts/LayoutDocumento.vue'
 import TelaDocumentos from '@/views/TelaDocumentos.vue'
 import DfdDoc from '@/components/Dfd/DfdDoc.vue'
@@ -19,6 +22,17 @@ const routes = [
         path: '',
         name: 'pagina-inicial',
         component: PaginaInicial
+      }
+    ]
+  },
+  {
+    path: '/login',
+    component: LoginLayout,
+    children: [
+      {
+        path: '',
+        name: 'tela-login',
+        component: TelaLogin
       }
     ]
   },

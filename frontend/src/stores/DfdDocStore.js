@@ -135,8 +135,8 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
                                 { nome: 'classe', tipo: 'texto', prompt: 'Classe do material'},
                                 { nome: 'descricao', tipo: 'texto', prompt: 'Descrição do material'},
                                 { nome: 'und', tipo: 'texto', prompt: 'Unidade de medida'},
-                                { nome: 'qtde', tipo: 'numero', prompt: 'Quantidade do item'},
-                                { nome: 'precoUnd', tipo: 'numero', prompt: 'Preço unitário do item'},
+                                { nome: 'qtde', tipo: 'texto', prompt: 'Quantidade do item'},
+                                { nome: 'precoUnd', tipo: 'texto', prompt: 'Preço unitário do item'},
                             ],
                 prompt: `devolva um array com os serviços, e para cada serviço tem que ter
                          {"item": "", "classe": "", "descricao": "", "und": "mês, ano, dia, semana", "qtde": "", "precoUnd": ""}.
@@ -266,6 +266,16 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
     },
 
     actions: {
+        calcularTotal(qtde, precoUnd) {
+            if (!qtde || !precoUnd) return '0,00';
+            const preco = typeof precoUnd === 'string'
+                ? Number(precoUnd.replace(/[^\d,]/g, '').replace('.','').replace(',','.'))
+                : Number(precoUnd);
+            const quantidade = Number(qtde);
+            if (isNaN(preco) || isNaN(quantidade)) return '0,00';
+            return (quantidade * preco).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        },
+
         diaAtual() {
             const hoje = new Date();
             const dia = String(hoje.getDate()).padStart(2, '0');

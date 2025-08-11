@@ -1,5 +1,5 @@
 <template>
-    <div style="break-inside: avoid;">
+    <div>
         <div id="container">
             <div id="voltar">
                 <div>
@@ -243,6 +243,9 @@
                                 </div>
                                 
                                 <div>
+                                    <div class="texto">
+                                        <h2>6 Descrição Da Solução E Quantidades</h2>
+                                    </div>
                                     <div class="textoponto">
                                         <h2>6.<span class="posponto">1</span> Materiais</h2>
                                         <table class="tabela">
@@ -280,7 +283,7 @@
                                                         </template>
                                                     </td>
 
-                                                    <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
+                                                    <td>R${{ dfdStore.calcularTotal(linha.qtde, linha.precoUnd) }}</td>
 
                                                     <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
                                                         <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('materiais', index)" />
@@ -333,7 +336,7 @@
                                                         </template>
                                                     </td>
 
-                                                    <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
+                                                    <td>R${{ dfdStore.calcularTotal(linha.qtde, linha.precoUnd) }}</td>
 
                                                     <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
                                                         <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('servicos', index)" />
@@ -609,7 +612,7 @@
 
                 </div>
                 
-                <div v-if="dfdStore.modoEdicaoManual">
+                <div v-if="dfdStore.modoEdicaoManual && dfdStore.mostrarPdf">
                     <div class="btnConcluir">
                         <q-btn label="Concluir" id="concluir" @click="dfdStore.voltarParaFormulario" />
                     </div>
@@ -703,7 +706,7 @@ import { onMounted, ref } from 'vue';
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    background-color: #d6d6d6;
+    background: linear-gradient(to bottom, #d6d6d6 0%, #b0b0b0 100%);
  }
 
  /* feito para definir e separar a parte que contém o documento e os botões da parte do formulário */
@@ -752,7 +755,6 @@ import { onMounted, ref } from 'vue';
  #voltar {
      height: 6vh;
      padding: 10px;
-     background-color: #d6d6d6;
      flex-shrink: 0;
     }
 
@@ -894,7 +896,7 @@ import { onMounted, ref } from 'vue';
     line-height: 1.5;
     letter-spacing: .005mm;
     margin-bottom: 1mm;
-    text-indent: 3em;
+    text-indent: 3.5em;
 }
 
 .textoponto h2::first-letter {

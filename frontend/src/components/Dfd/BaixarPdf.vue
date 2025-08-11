@@ -44,7 +44,7 @@ export default {
     font-weight: bold;
     font-size: 25px;
     width: 15vw;
-    height: 5vw;
+    height: 10vh;
     padding: 0 20px;
     border-radius: 6px;
 }
