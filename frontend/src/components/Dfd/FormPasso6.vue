@@ -1,5 +1,5 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Para qual data pretende receber?</h2>
 
         <div class="q-pa-md" style="max-width: 300px">
@@ -7,7 +7,7 @@
             <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy v-model="popup" cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="date" mask="YYYY-MM-DD" color="purple" text-color="white">
+                    <q-date v-model="form.dataPrevisao" mask="YYYY-MM-DD" color="purple" text-color="white">
                     <div class="row items-center justify-end">
                         <q-btn @click="popup = false" label="Fechar" id="cor" flat />
                     </div>
@@ -32,19 +32,30 @@
 </template>
 
 <script>
+import { useDfdDocStore } from '@/stores/DfdDocStore';
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true
+        }
+    },
+
     data() {
         return {
-            date: new Date().toISOString().substr(0, 10),
             popup: false,
+            form: { 
+                dataPrevisao: '',
+             },
+             dfdStore: useDfdDocStore(),
         }
     },
 
     computed: {
         dateBr: {
             get() {
-                if (!this.date) return '';
-                const [year, month, day] = this.date.split('-');
+                if (!this.form.dataPrevisao) return '';
+                const [year, month, day] = this.form.dataPrevisao.split('-');
                 return `${day}/${month}/${year}`;
             },
             set(value) {
@@ -56,22 +67,39 @@ export default {
                         month.length === 2 &&
                         year.length === 4
                     ) {
-                        this.date = `${year}-${month}-${day}`;
+                        this.form.dataPrevisao = `${year}-${month}-${day}`;
                     }
                 }
             },
         },
     },
 
+    mounted() {
+        this.dfdStore.diaAtual();
+        const [dia, mes, ano] = this.dfdStore.dataAtual.split('/');
+        this.form.dataPrevisao = `${ano}-${mes}-${dia}`;
+    },
+
+    watch: {
+        formData: {
+            handler(newVal) {
+                this.form = { ...newVal };
+                if (!this.form.dataRecebimento) {
+                    this.form.dataRecebimento = new Date().toISOString().substr(0, 10);
+                }
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         },
         enviarAnterior() {
             this.$emit('prev');
         },
         validarDataBr(value) {
-            if (!value) return true; // campo vazio pode ser válido, ajustar se quiser obrigatório
+            if (!value) return true;
             
             const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
             if (!regex.test(value)) return 'Data inválida';

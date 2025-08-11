@@ -1,11 +1,11 @@
 <template>
-    <form action="" method="POST" class="form">
+    <form @submit.prevent="enviarProximo" class="form">
         <h2>Previsão de demanda no PCA?</h2>
 
         <div>
             <label for="">DFD XXX | 20XX:</label>
             <br>
-            <input type="text" name="previsao" id="previsao" class="textoform" placeholder="Data de previsão . . .">
+            <input v-model="form.previsaoPca" type="text" name="previsao" id="previsao" class="textoform" placeholder="Data de previsão . . .">
         </div>
         <br>
         <div class="flex">
@@ -23,9 +23,31 @@
 
 <script>
 export default {
+    props: {
+        formData: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            form: { },
+        }
+    },
+
+    watch: {
+        formData: {
+            immediate: true,
+            handler(newVal) {
+                this.form = { ...newVal }
+            }
+        }
+    },
+
     methods: {
         enviarProximo() {
-            this.$emit('next');
+            this.$emit('next', this.form);
         },
         enviarAnterior() {
             this.$emit('prev');

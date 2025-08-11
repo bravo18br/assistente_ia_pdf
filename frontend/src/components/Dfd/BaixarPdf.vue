@@ -3,13 +3,30 @@
         <h2>Revise as informações do documento antes de baixar o PDF!</h2>
         <br>
         <p>Confira se todas as informações são condizentes com o conteúdo, afinal a Intelingência Artificial não é 100% confiável, sempre revise o documento antes de baixar!</p>
-        <p>Dessa forma, se estudo corret, baixe o PDF, se não, edite as informações necessárias no documento.</p>
+        <p>Dessa forma, se tudo estiver correto, baixe o PDF, se não, edite as informações necessárias no documento.</p>
     </div>
     <br><br>
     <div class="btn">
-        <q-btn id="baixar" class="shadow-4">BAIXAR PDF</q-btn>
+        <q-btn id="baixar" class="shadow-4" @click="dfdStore.gerarPdf()">BAIXAR PDF</q-btn>
     </div>
 </template>
+
+<script>
+import { useDfdDocStore } from '@/stores/DfdDocStore';
+export default {
+    props: { 
+        formData: {
+            type: Object,
+            required: false,
+        }
+    },
+    data() {
+        return {
+            dfdStore: useDfdDocStore()
+        }
+    }
+}
+</script>
 
 <style scoped>
 .texto h2 {

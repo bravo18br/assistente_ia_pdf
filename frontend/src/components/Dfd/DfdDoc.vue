@@ -1,79 +1,247 @@
 <template>
-    <div>
+    <div style="break-inside: avoid;">
         <div id="container">
-            <div id="doc">
-                <div id="voltar">
-                    <div>
-                        <router-link to="/" style="display: inline-block;">
-                            <q-btn square class="back" icon="home" />
-                        </router-link>
-                    </div>
+            <div id="voltar">
+                <div>
+                    <router-link to="/" style="display: inline-block;">
+                        <q-btn square class="back" icon="home" />
+                    </router-link>
                 </div>
+            </div>
+
+            <div v-if="dfdStore.dicaCampo()" class="painel-ajuda">
+                <p>{{ dfdStore.dicaCampo() }}</p>
+            </div>
+
+
+            <div :class="['doc', { 'doc-expandido' : !dfdStore.value }]">
 
                 <div class="q-ma-md">
                     <q-scroll-area class="rolagem-documento">
                     <div class="q-py-xs">
-                        <div id="documento">
-                            <div id="pag">
+                        <div id="documento" ref="Documento">
+                            <div id="pag" >
+
                                 <div class="borda">
                                     <h1>DOCUMENTO DE FORMALIZAÇÃO DE DEMANDA</h1>
-                                    <h1>N.° 025/2025</h1>
+                                    <h1>N.° XXX/XXXX</h1>
                                 </div>
+                                 
                                 <div id="bloco">
-                                    <div class="borda dois">
-                                        <h3>Área Requisitante:</h3>
-                                        <p>Dpto. de Gestão de Infraestrutura - SMCIT</p>
+                                    <div class="borda dois" @dblclick="dfdStore.ativarEdicaoManual('areaRequisitante')">
+                                        <label><h3>Área Requisitante:</h3></label>
+                                        <div v-if="dfdStore.tipoInput('areaRequisitante')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.areaRequisitante"
+                                                :prompt="dfdStore.getPromptCampo('areaRequisitante')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{  dfdStore.campos.areaRequisitante || 'XXXXXXXXX' }}</p>
+                                        </div>
                                     </div>
-                                    <div class="borda dois-um">
-                                        <h3>Data Previsão:</h3>
-                                        <p>07/2025</p>
+
+                                    <div class="borda dois-um" @dblclick="dfdStore.ativarEdicaoManual('dataPrevisao')">
+                                        <label><h3>Data Previsão:</h3></label>
+                                        <div v-if="dfdStore.tipoInput('dataPrevisao')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.dataPrevisao"
+                                                :prompt="dfdStore.getPromptCampo('dataPrevisao')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.dataPrevisao || 'XX/XXXX' }}</p>
+                                        </div>
                                     </div>
-                                    <div class="borda dois-um">
-                                        <h3>Exercício:</h3>
-                                        <p>2025</p>
+
+                                    <div class="borda dois-um" @dblclick="dfdStore.ativarEdicaoManual('exercicio')">
+                                        <label><h3>Exercício:</h3></label>
+                                        <div v-if="dfdStore.tipoInput('exercicio')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.exercicio" 
+                                                :prompt="dfdStore.getPromptCampo('exercicio')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.exercicio || 'XXXX' }}</p>
+                                        </div>
                                     </div>
+
                                     <div class="borda dois-um">
                                         <h3>Data:</h3>
-                                        <p>20/03/2025</p>
+                                        <p>{{ dfdStore.dataAtual }}</p>
                                     </div>
                                 </div>
+                                
                                 <div id="bloco">
-                                    <div class="borda tres-um">
-                                        <h3>Responsável pela Solicitação:</h3>
-                                        <p>XXXXXXX XXXX XXXXX</p>
+                                    <div class="borda tres-um" @dblclick="dfdStore.ativarEdicaoManual('responsavelSolicitacao')">
+                                        <label><h3>Responsável pela Solicitação:</h3></label>
+                                        <div v-if="dfdStore.tipoInput('responsavelSolicitacao')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.responsavelSolicitacao" 
+                                                :prompt="dfdStore.getPromptCampo('responsavelSolicitacao')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.responsavelSolicitacao || 'XXXXXXXXXXXXXXX XXXXX XXXXXXX' }}</p>
+                                        </div>
                                     </div>
-                                    <div class="borda tres-dois">
-                                        <h3>Matrícula:</h3>
-                                        <p>XXXXXXXXX</p>
-                                    </div>
-                                </div>
-                                <div class="borda quatro">
-                                    <h3>Grau de Prioridade: (X) Baixo | ( ) Médio | ( ) Alto | ( ) Altíssimo</h3>
                                     
-                                    <h3>Justificativa:</h3>
-                                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum id fugit libero, illum error nisi quod quibusdam asperiores corrupti. Quo quibusdam hic, sit expedita architecto reprehenderit vitae deserunt beatae nisi!</p>
+                                    <div class="borda tres-dois" @dblclick="dfdStore.ativarEdicaoManual('matricula')">
+                                        <label><h3>Matrícula:</h3></label>
+                                        <div v-if="dfdStore.tipoInput('matricula')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.matricula"
+                                                :prompt="dfdStore.getPromptCampo('matricula')" 
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.matricula || 'XXXXX' }}</p>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="texto">
-                                    <h2>1 Do Objeto</h2>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequatur ut totam aliquam asperiores quisquam magni molestiae accusamus sequi, nesciunt est iste repudiandae, vero quaerat facere assumenda officiis odit distinctio!</p>
+                                <div class="borda quatro">
+                                    <div @dblclick="dfdStore.ativarEdicaoManual('grauPrioridade')">
+                                        <div v-if="dfdStore.tipoRadio('grauPrioridade')">
+                                            <label><h3>Grau de Prioridade: 
+                                            <label>
+                                                <input type="radio" value="Baixo" v-model="dfdStore.campos.grauPrioridade" @change="dfdStore.encerrarEdicao()"> Baixo
+                                            </label>
+                                            <label>
+                                                <input type="radio" value="Médio" v-model="dfdStore.campos.grauPrioridade" @change="dfdStore.encerrarEdicao()"> Médio
+                                            </label>
+                                            <label>
+                                                <input type="radio" value="Alto" v-model="dfdStore.campos.grauPrioridade" @change="dfdStore.encerrarEdicao()"> Alto
+                                            </label>
+                                            <label>
+                                                <input type="radio" value="Altíssimo" v-model="dfdStore.campos.grauPrioridade" @change="dfdStore.encerrarEdicao()"> Altíssimo
+                                            </label>
+                                            </h3></label>
+                                        </div>
+                                        <div v-else>
+                                            <h3>
+                                                Grau de Prioridade: 
+                                                <template v-for="(nivel, index) in dfdStore.getOpcoesCampo('grauPrioridade')" :key="nivel">
+                                                    ({{  dfdStore.campos.grauPrioridade === nivel ? 'X' :  ' ' }}) {{ nivel }}
+                                                    <span v-if="index < dfdStore.getOpcoesCampo('grauPrioridade').lenght - 1"></span>
+                                                </template>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    
+                                    <div @dblclick="dfdStore.ativarEdicaoManual('justificativa')">
+                                        <label><h3>Justificativa:</h3></label>
+                                        <div v-if="dfdStore.tipoTextarea('justificativa')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.justificativa" 
+                                                :prompt="dfdStore.getPromptCampo('justificativa')"
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.justificativa || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="texto">
-                                    <h2>2 Da Sugestão De Modalidade</h2>
-                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste culpa molestiae assumenda provident consectetur? Distinctio provident eius dolore necessitatibus placeat. Fugiat nulla quis rem unde culpa expedita commodi quisquam asperiores!</p>
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('doObjeto')">
+                                    <label><h2>1 Do Objeto</h2></label>
+                                    <div v-if="dfdStore.tipoTextarea('doObjeto')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.doObjeto" 
+                                            :prompt="dfdStore.getPromptCampo('doObjeto')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.doObjeto || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
                                 </div>
-                                <div class="texto">
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('sugestaoModalidade')">
+                                    <label><h2>2 Da Sugestão De Modalidade</h2></label>
+                                    <div v-if="dfdStore.tipoTextarea('sugestaoModalidade')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.sugestaoModalidade"
+                                            :prompt="dfdStore.getPromptCampo('sugestaoModalidade')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.sugestaoModalidade || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('justificativaNecessidade')">
                                     <h2>3 Justificativa Da Necessidade</h2>
-                                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. At fuga unde animi officiis sequi numquam ipsum rem neque aut voluptas placeat, reiciendis inventore ipsa quo atque qui perferendis quibusdam rerum?</p>
+                                    <div v-if="dfdStore.tipoTextarea('justificativaNecessidade')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.justificativaNecessidade" 
+                                            :prompt="dfdStore.getPromptCampo('justificativaNecessidade')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.justificativaNecessidade || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
                                 </div>
-                                <div class="texto">
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('previsaoPca')">
                                     <h2>4 Previsão Da Demanda No Pca</h2>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos provident unde aliquid harum nemo doloremque minus, eos alias consequatur inventore voluptatum temporibus nostrum placeat rem numquam dolorum quaerat culpa. Fugiat.</p>
+                                    <div v-if="dfdStore.tipoTextarea('previsaoPca')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.previsaoPca" 
+                                            :prompt="dfdStore.getPromptCampo('previsaoPca')"
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.previsaoPca || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
                                 </div>
-                                <div class="texto">
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('demandasVinculadas')">
                                     <h2>5 Demandas Vinculadas ou Interdependentes</h2>
-                                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus nemo porro laudantium distinctio architecto excepturi dignissimos iste error ipsa facilis, omnis, explicabo nostrum deleniti recusandae qui illum, hic numquam ullam?</p>
+                                    <div v-if="dfdStore.tipoTextarea('demandasVinculadas')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.demandasVinculadas"
+                                            :prompt="dfdStore.getPromptCampo('demandasVinculadas')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.demandasVinculadas || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
                                 </div>
+                                
                                 <div>
                                     <div class="textoponto">
                                         <h2>6.<span class="posponto">1</span> Materiais</h2>
@@ -87,32 +255,47 @@
                                                     <th style="width: 10%;">Qtde</th>
                                                     <th style="width: 10%;">R$ Unt.</th>
                                                     <th style="width: 10%;">R$ Total</th>
+                                                    <th v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith('materiais_')" style="width: 10px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
-                                                    <td>2</td>
+                                                <tr v-for="(linha, index) in dfdStore.campos.materiais" :key="linha.item">
+
+                                                    <td
+                                                        v-for="coluna in dfdStore.definicaoMateriais.colunas"
+                                                        :key="coluna.nome"
+                                                        @dblclick="dfdStore.ativarEdicaoManual(`materiais_${coluna.nome}_${index}`)"
+                                                    >
+                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `materiais_${coluna.nome}_${index}`">
+                                                            <ContentEditable 
+                                                                :type="coluna.tipo === 'numero' ? 'number' : 'text'"
+                                                                v-model="linha[coluna.nome]"
+                                                                @blur="dfdStore.encerrarEdicao"
+                                                                @keyup.enter="dfdStore.encerrarEdicao"
+                                                                autofocus
+                                                            />
+                                                        </template>
+                                                        <template v-else>
+                                                            {{ linha[coluna.nome] || '—' }}
+                                                        </template>
+                                                    </td>
+
+                                                    <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
+
+                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
+                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('materiais', index)" />
+                                                    </td>
+
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith(`materiais_`) && dfdStore.campoEditando?.nome?.startsWith('materiais_')">
+                                            <q-btn @click="dfdStore.adicionarLinha('materiais')">Adicionar Linha</q-btn>
+                                        </div>
                                     </div>
+
                                     <div class="textoponto">
-                                        <h2>6.<span class="posponto">1</span> Materiais</h2>
+                                        <h2>6.<span class="posponto">2</span> Serviços</h2>
                                         <table class="tabela">
                                             <thead>
                                                 <tr>
@@ -125,76 +308,277 @@
                                                     <th rowspan="2" style="width: 10%;">Qtde</th>
                                                     <th rowspan="2" style="width: 10%;">R$ Unt.</th>
                                                     <th rowspan="2" style="width: 10%;">R$ Total</th>
+                                                    <th v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith('servicos_')" style="width: 10px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr style="height: 40px;">
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
-                                                    <td>1</td>
+                                                <tr v-for="(linha, index) in dfdStore.campos.servicos" :key="linha.item" style="height: 40px;">
+
+                                                    <td
+                                                        v-for="coluna in dfdStore.definicaoServicos.colunas"
+                                                        :key="coluna.nome"
+                                                        @dblclick="dfdStore.ativarEdicaoManual(`servicos_${coluna.nome}_${index}`)"
+                                                    >
+                                                        <template v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome === `servicos_${coluna.nome}_${index}`">
+                                                            <ContentEditable 
+                                                                :type="coluna.tipo === 'numero' ? 'number' : 'text'"
+                                                                v-model="linha[coluna.nome]"
+                                                                @blur="dfdStore.encerrarEdicao"
+                                                                @keyup.enter="dfdStore.encerrarEdicao"
+                                                                autofocus
+                                                            />
+                                                        </template>
+                                                        <template v-else>
+                                                            {{ linha[coluna.nome] || '—' }}
+                                                        </template>
+                                                    </td>
+
+                                                    <td>R${{ (linha.qtde * linha.precoUnd).toFixed(2) }}</td>
+
+                                                    <td v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.endsWith(`_${index}`)">
+                                                        <q-btn color="negative" label="Excluir" @click="dfdStore.removerLinha('servicos', index)" />
+                                                    </td>
+
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div v-if="dfdStore.modoEdicaoManual && dfdStore.campoEditando?.nome?.startsWith('servicos_')">
+                                            <q-btn @click="dfdStore.adicionarLinha('servicos')">Adicionar Linha</q-btn>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="texto">
+
+                                <div class="texto" @dblclick="dfdStore.ativarEdicaoManual('previsaoUtilizacao')">
                                     <h2>7 Previsão de Utilização E Critérios De Aceitação</h2>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor soluta sint quidem velit iure repellendus earum, delectus sed ut eaque voluptate in consectetur ipsum minima adipisci qui nihil inventore amet!</p>
+                                    <div v-if="dfdStore.tipoTextarea('previsaoUtilizacao')">
+                                        <ContentEditable 
+                                            v-model="dfdStore.campos.previsaoUtilizacao" 
+                                            :prompt="dfdStore.getPromptCampo('previsaoUtilizacao')" 
+                                            @blur="dfdStore.encerrarEdicao()" 
+                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                            autofocus 
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <p>{{ dfdStore.campos.previsaoUtilizacao || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                    </div>
                                 </div>
+
                                 <div class="texto">
                                     <h2>8 Indicação De Equipe De Planejamento</h2>
                                     <p>Para composição da equipe de planejamento, indicamos os servidores abaixo</p>
                                     <ul>
-                                        <li>XXXXXXX</li>
-                                        <li>XXXXXXX</li>
-                                        <li>XXXXXXX</li>
-                                        <li>XXXXXXX</li>
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoUm')">
+                                            <div v-if="dfdStore.tipoInput('equipePlanejamentoUm')">
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoUm"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoUm')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <li>{{ dfdStore.campos.equipePlanejamentoUm || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
+                                            </div>
+                                        </div>
+
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoDois')">
+                                            <div v-if="dfdStore.tipoInput('equipePlanejamentoDois')">
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoDois"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoDois')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <li>{{ dfdStore.campos.equipePlanejamentoDois || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
+                                            </div>
+                                        </div>
+
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoTres')">
+                                            <div v-if="dfdStore.tipoInput('equipePlanejamentoTres')">
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoTres"
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoTres')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <li>{{ dfdStore.campos.equipePlanejamentoTres || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
+                                            </div>
+                                        </div>
+
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('equipePlanejamentoQuatro')">
+                                            <div v-if="dfdStore.tipoInput('equipePlanejamentoQuatro')">
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.equipePlanejamentoQuatro" 
+                                                    :prompt="dfdStore.getPromptCampo('equipePlanejamentoQuatro')"
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <li>{{ dfdStore.campos.equipePlanejamentoQuatro || 'XXXXXXXX XXXXX XXX XXXXXX' }}</li>
+                                            </div>
+                                        </div>
                                     </ul>
-                                    <p>OS servidores indicados possuem formação e expertise necessários ao correto planejamento da presente contratação</p>
+                                    <div @dblclick="dfdStore.ativarEdicaoManual('justificativaEquipe')">
+                                        <div v-if="dfdStore.tipoTextarea('justificativaEquipe')">
+                                            <ContentEditable 
+                                                v-model="dfdStore.campos.justificativaEquipe"
+                                                :prompt="dfdStore.getPromptCampo('justificativaEquipe')" 
+                                                @blur="dfdStore.encerrarEdicao()" 
+                                                @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                autofocus 
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <p>{{ dfdStore.campos.justificativaEquipe || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div>
                                     <div class="texto">
                                         <h2>9 Da Fiscalização E Gestão Do Contato</h2>
-                                        <div style="display: flex; justify-content: flex-start;">
-                                            <p style="width: 50%;"><strong>Fiscal:</strong></p>
-                                            <p style="width: 50%;">XXXXXXXXX</p>
+                                        <div class="fiscal">
+                                            <h3>Fiscal:</h3>
+                                            <div @dblclick="dfdStore.ativarEdicaoManual('fiscal')">
+                                                <div v-if="dfdStore.tipoInput('fiscal')">
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.fiscal" 
+                                                        :prompt="dfdStore.getPromptCampo('fiscal')"
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <p>{{ dfdStore.campos.fiscal || 'XXXXXXXX XXXXX XXXXXX' }}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="display: flex; justify-content: flex-start;">
-                                            <p style="width: 50%;"><strong>Fiscal Substituto:</strong></p>
-                                            <p style="width: 50%;">XXXXXXXXX</p>
+
+                                        <div class="fiscal">
+                                            <h3>Fiscal Substituto:</h3>
+                                            <div @dblclick="dfdStore.ativarEdicaoManual('fiscalSubstituto')">
+                                                <div v-if="dfdStore.tipoInput('fiscalSubstituto')">
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.fiscalSubstituto"
+                                                        :prompt="dfdStore.getPromptCampo('fiscalSubstituto')" 
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <p>{{ dfdStore.campos.fiscalSubstituto || 'XXXXXXXX XXXXX XXXXXX' }}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="display: flex; justify-content: flex-start;">
-                                            <p style="width: 50%;"><strong>Gestor:</strong></p>
-                                            <p style="width: 50%;">XXXXXXXXX</p>
+
+                                        <div class="fiscal">
+                                            <h3>Gestor:</h3>
+                                            <div @dblclick="dfdStore.ativarEdicaoManual('gestor')">
+                                                <div v-if="dfdStore.tipoInput('gestor')">
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.gestor" 
+                                                        :prompt="dfdStore.getPromptCampo('gestor')"
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <p>{{ dfdStore.campos.gestor || 'XXXXXXXX XXXXX XXXXXX' }}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="display: flex; justify-content: flex-start;">
-                                            <p style="width: 50%;"><strong>Gestor Substituto:</strong></p>
-                                            <p style="width: 50%;">XXXXXXXXX</p>
+                                        
+                                        <div class="fiscal">
+                                            <h3>Gestor Substituto:</h3>
+                                            <div @dblclick="dfdStore.ativarEdicaoManual('gestorSubstituto')">
+                                                <div v-if="dfdStore.tipoInput('gestorSubstituto')">
+                                                    <ContentEditable 
+                                                        v-model="dfdStore.campos.gestorSubstituto"
+                                                        :prompt="dfdStore.getPromptCampo('gestorSubstituto')" 
+                                                        @blur="dfdStore.encerrarEdicao()" 
+                                                        @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                        autofocus 
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <p>{{ dfdStore.campos.gestorSubstituto || 'XXXXXXXX XXXXX XXXXXX' }}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="textoponto">
                                         <h2>9.<span class="posponto">1</span> Justificativa</h2>
-                                        <p>Os servidores indicados são responsáveis por acompanhar a execução contratual, realizar o recebimento provisório e atestar o recebimento definitivo dos bens/serviços.</p><br>
-                                        <div style="display: flex; justify-content: flex-start;">
-                                            <p p style="width: 50%;"><strong>Elaborado por:</strong></p>
-                                            <p p style="width: 50%;"><strong>Ordenador de Despesa:</strong></p>
+                                        <div @dblclick="dfdStore.ativarEdicaoManual('justificativaFiscal')">
+                                            <div v-if="dfdStore.tipoTextarea('justificativaFiscal')">
+                                                <ContentEditable 
+                                                    v-model="dfdStore.campos.justificativaFiscal"
+                                                    :prompt="dfdStore.getPromptCampo('justificativaFiscal')" 
+                                                    @blur="dfdStore.encerrarEdicao()" 
+                                                    @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                    autofocus 
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <p>{{ dfdStore.campos.justificativaFiscal || 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti, repellendus! Numquam perferendis quam odit. Veniam officiis tempore voluptate veritatis maxime, omnis pariatur debitis iure id. Expedita itaque placeat eos cum!' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="fiscal">
+                                            <p><strong>Elaborado por:</strong></p>
+                                            <p><strong>Ordenador de Despesa:</strong></p>
                                             <br><br><br><br>
                                         </div>
-                                        <div style="display: flex; justify-content: flex-start;">
+
+                                        <div class="fiscal2">
                                             <div style="width: 40%; border-top: 1px solid black;">
-                                                <p style="text-align: center;">XXXXXXXXXXXXXXXXX</p>
-                                                <p style="text-align: center;">Coordenador Inovação</p>
+                                                <div @dblclick="dfdStore.ativarEdicaoManual('nomeElaborador')">
+                                                    <div v-if="dfdStore.tipoInput('nomeElaborador')">
+                                                        <ContentEditable 
+                                                            v-model="dfdStore.campos.nomeElaborador" 
+                                                            :prompt="dfdStore.getPromptCampo('nomeElaborador')"
+                                                            @blur="dfdStore.encerrarEdicao()" 
+                                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                            autofocus 
+                                                        />
+                                                    </div>
+                                                    <div v-else>
+                                                        <p>{{ dfdStore.campos.nomeElaborador || 'XXXXXXXX XXXXX XXX XXXXXX' }}</p>
+                                                    </div>
+                                                    <p>Coordenador Inovação</p>
+                                                </div>
                                             </div>
+
                                             <div style="width: 10%;"></div>
-                                             <div style="width: 40%; border-top: 1px solid black;">
-                                                <p style="text-align: center;">XXXXXXXXXXXXXXXXX</p>
-                                                <p style="text-align: center;">Secretário Municipal de Ciência, Inovação, Tecnologia e Desenvolvimento Econômico</p>
+
+                                            <div style="width: 40%; border-top: 1px solid black;">
+                                                <div @dblclick="dfdStore.ativarEdicaoManual('nomeOrdenador')">
+                                                    <div v-if="dfdStore.tipoInput('nomeOrdenador')">
+                                                        <ContentEditable 
+                                                            v-model="dfdStore.campos.nomeOrdenador"
+                                                            :prompt="dfdStore.getPromptCampo('nomeOrdenador')" 
+                                                            @blur="dfdStore.encerrarEdicao()"
+                                                            @keyup.enter="dfdStore.encerrarEdicao()" 
+                                                            autofocus 
+                                                        />
+                                                    </div>
+                                                    <div v-else>
+                                                        <p>{{ dfdStore.campos.nomeOrdenador || 'XXXXXXXX XXXXX XXX XXXXXX' }}</p>
+                                                    </div>
+                                                </div>
+                                                <p>Secretário Municipal de Ciência, Inovação, Tecnologia e Desenvolvimento Econômico</p>
                                             </div>
                                         </div>
                                     </div>
@@ -205,33 +589,70 @@
                     </q-scroll-area>
                 </div>
 
-                <div id="toggle" class="shadow-4" v-if="!formFinalizado">
+                <div id="toggle" class="shadow-4" v-if="!dfdStore.formFinalizado">
                     <div class="toggle">
                         <h2>Formulário de I.A.</h2>
                     </div>
                     <div class="q-pa-md">
-                        <q-toggle v-model="value" color="purple-14" />
+                        <q-toggle v-model="dfdStore.value" color="purple-14" class="tamanhotg" />
+                    </div>
+
+                    <div v-if="!dfdStore.value">
+                        <div class="btnFinalizar">
+                            <q-btn label="Salvar" id="finalizar" class="shadow-4" @click="() => {
+                                dfdStore.formFinalizado = true
+                                dfdStore.mostrarPdf = true
+                                dfdStore.value = true
+                            }"  />
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div v-if="dfdStore.modoEdicaoManual">
+                    <div class="btnConcluir">
+                        <q-btn label="Concluir" id="concluir" @click="dfdStore.voltarParaFormulario" />
                     </div>
                 </div>
 
             </div>
-            <div id="form">
+
+            <div id="form" v-if="dfdStore.value">
                 <div style="flex-grow: 1;">
-                    <component :is="formAtualComponent" @next="proximo" @prev="anterior"></component>
+                    <template v-if="!dfdStore.formFinalizado">
+                        <component :is="formComponents[dfdStore.formAtual]"
+                                   :formData="dfdStore.formData"
+                                   @next="dfdStore.proximo"
+                                   @prev="dfdStore.anterior">
+                        </component>
+                    </template>
+                    
+                    <template v-else-if="dfdStore.mostrarPdf">
+                        <BaixarPdf />
+                    </template>
+
+                    <template v-else>
+                        <component 
+                            :is="formComponents.finalizado"
+                            :formData="dfdStore.formData"
+                        />
+                    </template>
                 </div>
                 
                 <div style="text-align: center;">
                     <p>Você pode também editar manualmente! (Isso vai desativar o formulário de I.A.)</p>
                 </div>
-                <div class="btnedit">
+                <div class="btnedit" @click="dfdStore.desligarFormulario()">
                     <q-btn id="editar" label="EDITAR DOCUMENTO" class="shadow-4"></q-btn>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import ContentEditable from '../ContentEditable.vue';
 import BaixarPdf from './BaixarPdf.vue';
 import FormPasso1 from './FormPasso1.vue';
 import FormPasso2 from './FormPasso2.vue';
@@ -239,51 +660,39 @@ import FormPasso3 from './FormPasso3.vue';
 import FormPasso4 from './FormPasso4.vue';
 import FormPasso5 from './FormPasso5.vue';
 import FormPasso6 from './FormPasso6.vue';
+import { useDfdDocStore } from '@/stores/DfdDocStore';
+import { watch } from 'vue';
+import { onMounted, ref } from 'vue';
 
-export default {
-    components: { FormPasso1, FormPasso2, FormPasso3, FormPasso4, FormPasso5, FormPasso6, BaixarPdf },
+    const Documento = ref(null)
+    const dfdStore = useDfdDocStore()
 
-    data() {
-        return {
-            value: false,
-            formAtual: 1,
-            formData: {},
-            formFinalizado: false
-        };
-    },
-
-    computed: {
-        formAtualComponent() {
-            return this.formFinalizado ? 'BaixarPdf' : `FormPasso${this.formAtual}`;
-        },
-    },
-
-    methods: {
-        proximo(data) {
-            this.formData = { ...this.formData, ...data};
-
-            if (this.formAtual < 6) {
-                this.formAtual++;
-            } else {
-                this.submitForm();
-            }
-        },
-
-        anterior(data) {
-            this.formData = { ...this.formData, ...data };
-
-            if (this.formAtual > 1) {
-                this.formAtual--;
-            }
-        },
-
-        submitForm() {
-            console.log('Formulário Enviado:', this.formData);
-            this.formFinalizado = true;
-        }
+    const formComponents = {
+        1: FormPasso1,
+        2: FormPasso2,
+        3: FormPasso3,
+        4: FormPasso4,
+        5: FormPasso5,
+        6: FormPasso6,
+        finalizado: BaixarPdf
     }
-};
 
+    onMounted(() => {
+        dfdStore.diaAtual();
+
+        dfdStore.Documento = Documento.value
+        console.log(Documento.value);
+            
+    })
+
+    watch(() => [dfdStore.toggleLigado, dfdStore.value], ([toggleLigado, value]) => {
+        if (toggleLigado && value) {
+            dfdStore.modoEdicaoManual = false;
+            console.log('Edição Manual desativada');
+
+        }
+    })
+    
 </script>
 
 <style scoped>
@@ -298,28 +707,37 @@ export default {
  }
 
  /* feito para definir e separar a parte que contém o documento e os botões da parte do formulário */
- #doc {
+ .doc {
     flex: 1 1 60%;
     display: flex;
-    justify-content: column;
+    justify-content: center;
     border-right: 1px solid #ccc;
+    transition: flex 0.5s ease, margin 0.5s ease;
+ }
+
+ .doc-expandido {
+    flex: 1 1 80%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    border-right: none;
  }
 
  /* definir e separar o formulário */
  #form {
-    flex: 1 1 30%;
+    flex: 1 1 20%;
     padding: 2.5%;
     background-color: white;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     overflow-y: auto;
-
     display: flex;
     flex-direction: column;
  }
 
  /* feito para definir o espaço do botão de liga/desliga do formulário */
  #toggle {
-    width: 20%;
+    width: 16%;
     height: 20vh;
     background-color: white;
     display: flex;
@@ -327,7 +745,7 @@ export default {
     align-items: center;
     border-right: 1px solid #ccc;
     border-radius: 10px;
-    margin-left: 2vw;
+    margin-left: 1vw;
  }
 
  /* feito para definir o espaço do botão de voltar ao início */
@@ -343,15 +761,14 @@ export default {
     padding: 2rem;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
     background-color: rgb(255, 255, 255);
-    height: 5%;
 }
 
 /* parte do scroll, também feito colocado o tamanho de folha A4 para deixar o documento nesse formato */
 .q-ma-md {
     min-width: 210mm;
-    /* min-height: 297mm; */
+    height: 100vh;
     display: flex;
-    flex-direction: column;
+    justify-content: column;
 }
 
 /* deixar o documento para rolar no scroll */
@@ -366,7 +783,7 @@ export default {
     margin-top: 5%;
     margin-bottom: 5%;
     width: 100%;
-    font-size: 1vw;
+    font-size: 130%;
  }
 
  /* feito para os blocos do começo do documento */
@@ -477,7 +894,7 @@ export default {
     line-height: 1.5;
     letter-spacing: .005mm;
     margin-bottom: 1mm;
-    text-indent: 2.0em;
+    text-indent: 3em;
 }
 
 .textoponto h2::first-letter {
@@ -524,6 +941,34 @@ li {
     text-align: justify;
 }
 
+.fiscal {
+    display: flex; 
+    justify-content: flex-start;
+}
+
+.fiscal h3 {
+    width: 40%;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.fiscal p {
+    margin-top: 7mm;
+    width: 100%;
+    font-size: .8em;
+}
+
+.fiscal2 {
+    display: flex; 
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.fiscal2 p {
+    width: 100%;
+    text-align: center;
+}
+
 #editar {
     background-color: rgb(180, 2, 180);
     color: white;
@@ -541,13 +986,75 @@ li {
 }
 
 .toggle h2 {
-    font-size: x-large;
+    font-size: 22px;
     font-weight: bold;
+    text-align: center;
+    margin: auto;
+}
+
+.tamanhotg {
+    transform: scale(1.5);
+    transform-origin: center;
+}
+
+.q-pa-md {
+    padding: 10%;
 }
 
 .back {
     background-color: rgb(180, 2, 180);
     color: white;
+}
+
+.painel-ajuda {
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translateY(-50%);
+    width: 300px;
+    background: #f1f1f1;
+    padding: 16px 20px;
+    border-left: 4px solid #9c27b0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 0.9em;
+    color: #333;
+    z-index: 1000;
+}
+
+.btnFinalizar {
+    margin-top: 75vh;
+}
+
+#finalizar {
+    transform: translateY(-50%);
+    width: 8vw;
+    height: 6vh;
+    padding: 10px;
+    background-color: rgb(180, 2, 180);
+    color: #fff;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 20mm;
+}
+
+.btnConcluir {
+    margin-top: 90vh;
+    margin-left: 5vw;
+}
+
+#concluir {
+    transform: translateY(-50%);
+    width: 8vw;
+    height: 6vh;
+    padding: 10px;
+    background-color: rgb(180, 2, 180);
+    color: #fff;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 20mm;
 }
 
 

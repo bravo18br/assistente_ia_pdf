@@ -19,7 +19,7 @@
             <router-link :to="{ name: `documento-${doc.codigo.toLowerCase()}`, params: { tipo: doc.codigo.toLowerCase() } }" style="display: block; width: 100%; color: inherit; text-decoration: none;">
               <q-item-section>
                 <div id="abreviacao">{{ doc.codigo }}</div>
-                <div id="resumo" class="text-caption">{{ doc.titulo }} - {{ doc.resumo }}</div>
+                <div id="resumo" class="text-caption"><strong>{{ doc.titulo }}</strong> - {{ doc.resumo }}</div>
               </q-item-section>
             </router-link>
           </q-item>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       documentos: [
-        { codigo: 'DFD', titulo: 'Documento de Formalização de Demanda', resumo: 'Breve Resumo(?)' },
+        { codigo: 'DFD', titulo: 'Documento de Formalização de Demanda', resumo: 'É o instrumento oficial que justifica e detalha a necessidade de contratação de bens ou serviços pela administração pública, servindo também de base para o plano anual de contratações.' },
         { codigo: 'ETP', titulo: 'Estudo Técnico Preliminar', resumo: 'Breve Resumo(?)' },
         { codigo: 'TR', titulo: 'Termo de Referência', resumo: 'Breve Resumo(?)' },
         { codigo: '...', titulo: '', resumo: 'Breve Resumo(?)'},
@@ -68,7 +68,7 @@ export default {
  #resumo {
   font-size: 18px;
   padding: 10px;
-  text-align: left;
+  text-align: justify;
  }
 
  #meusdoc {
