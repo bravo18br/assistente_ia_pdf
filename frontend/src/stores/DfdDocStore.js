@@ -564,13 +564,6 @@ export const useDfdDocStore = defineStore ('dfdDoc', {
 
         },
 
-        desligarForm() {
-            console.log('Formulário desligado');
-            if (!this.value) {
-                this.toggleLigado = false;
-            }
-        },
-
         voltarParaFormulario() {
             this.value = true;
             this.modoEdicaoManual = false;

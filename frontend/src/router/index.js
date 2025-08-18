@@ -12,6 +12,7 @@ import DfdDoc from '@/components/Dfd/DfdDoc.vue'
 import EtpDoc from '@/components/Etp/EtpDoc.vue'
 import TrDoc from '@/components/Tr/TrDoc.vue'
 import TesteTeste from '@/components/TesteTeste.vue'
+import PpDoc from '@/components/PP/PpDoc.vue'
 
 const routes = [
   {
@@ -55,6 +56,12 @@ const routes = [
             path:'etp',
             name:'documento-etp',
             component: EtpDoc,
+          },
+
+          {
+            path:'pp',
+            name:'documento-pp',
+            component: PpDoc,
           },
 
           {

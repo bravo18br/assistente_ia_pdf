@@ -612,7 +612,7 @@
 
                 </div>
                 
-                <div v-if="dfdStore.modoEdicaoManual && dfdStore.mostrarPdf">
+                <div v-if="dfdStore.modoEdicaoManual && dfdStore.mostrarPdf || dfdStore.formFinalizado && dfdStore.modoEdicaoManual">
                     <div class="btnConcluir">
                         <q-btn label="Concluir" id="concluir" @click="dfdStore.voltarParaFormulario" />
                     </div>
@@ -664,8 +664,7 @@ import FormPasso4 from './FormPasso4.vue';
 import FormPasso5 from './FormPasso5.vue';
 import FormPasso6 from './FormPasso6.vue';
 import { useDfdDocStore } from '@/stores/DfdDocStore';
-import { watch } from 'vue';
-import { onMounted, ref } from 'vue';
+import { watch, onMounted, ref } from 'vue';
 
     const Documento = ref(null)
     const dfdStore = useDfdDocStore()

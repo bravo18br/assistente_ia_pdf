@@ -9,13 +9,13 @@
 
                 <q-space />
                 <div id="Usuario" class="column items-center q-mr-md">
-                    <div>Usuário</div>
-                    <div>110.565.729-90</div>
+                    <div>XXXXX XXXXXXXX XXXXXXXXX</div>
+                    <div>XXXXX-X</div>
                 </div>
             </q-toolbar>
         </q-header>
 
-        <q-page-container class="bg-grey-2" style="overflow-y: auto; height: 100vh;">
+        <q-page-container class="container">
             <router-view />
             <br><br><br><br>
         </q-page-container>
@@ -36,6 +36,7 @@ img {
     border-radius: 8px;
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
+    /* width: 15vw; */
 }
 
 #Titulo {
@@ -44,9 +45,10 @@ img {
     white-space: normal;
 }
 
- q-page-container {
-    overflow-y: auto;
-    min-height: 200vh;
+.container {
+    overflow-y: auto; 
+    height: 100vh;
+    background-color: rgb(238, 238, 238);
 }
 
 </style>

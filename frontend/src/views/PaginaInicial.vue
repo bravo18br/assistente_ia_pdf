@@ -41,8 +41,8 @@ export default {
       documentos: [
         { codigo: 'DFD', titulo: 'Documento de Formalização de Demanda', resumo: 'É o instrumento oficial que justifica e detalha a necessidade de contratação de bens ou serviços pela administração pública, servindo também de base para o plano anual de contratações.' },
         { codigo: 'ETP', titulo: 'Estudo Técnico Preliminar', resumo: 'Breve Resumo(?)' },
+        { codigo: 'PP', titulo: 'Pesquisa de Preço', resumo: 'Breve Resumo(?)' },
         { codigo: 'TR', titulo: 'Termo de Referência', resumo: 'Breve Resumo(?)' },
-        { codigo: '...', titulo: '', resumo: 'Breve Resumo(?)'},
         { codigo: '...', titulo: '', resumo: 'Breve Resumo(?)'},
         { codigo: '...', titulo: '', resumo: 'Breve Resumo(?)'},
         { codigo: '...', titulo: '', resumo: 'Breve Resumo(?)'},
