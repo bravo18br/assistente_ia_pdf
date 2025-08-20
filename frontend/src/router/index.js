@@ -5,6 +5,7 @@ import PaginaInicial from '../views/PaginaInicial.vue'
 
 import LoginLayout from '@/layouts/LoginLayout.vue'
 import TelaLogin from '../views/TelaLogin.vue'
+import TelaCadastro from '../views/TelaCadastro.vue'
 
 import LayoutDocumento from '@/layouts/LayoutDocumento.vue'
 import TelaDocumentos from '@/views/TelaDocumentos.vue'
@@ -34,6 +35,17 @@ const routes = [
         path: '',
         name: 'tela-login',
         component: TelaLogin
+      },
+    ]
+  },
+  {
+    path: '/cadastro',
+    component: LoginLayout,
+    children: [
+      {
+        path: '',
+        name: 'tela-cadastro',
+        component: TelaCadastro
       }
     ]
   },
