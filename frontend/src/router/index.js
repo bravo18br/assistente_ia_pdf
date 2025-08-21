@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import PaginaInicial from '../views/PaginaInicial.vue'
+import TelaInicial from '@/views/TelaInicial.vue'
 
 import LoginLayout from '@/layouts/LoginLayout.vue'
 import TelaLogin from '../views/TelaLogin.vue'
@@ -24,6 +25,17 @@ const routes = [
         path: '',
         name: 'pagina-inicial',
         component: PaginaInicial
+      }
+    ]
+  },
+  {
+    path: '/home',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'tela-inicial',
+        component: TelaInicial
       }
     ]
   },

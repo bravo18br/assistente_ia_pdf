@@ -47,7 +47,6 @@ img {
 
 .container {
     overflow-y: auto; 
-    height: 100vh;
     background-color: rgb(238, 238, 238);
 }
 
