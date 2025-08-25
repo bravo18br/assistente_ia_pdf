@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+use LdapRecord\Container;
+
+
+
+
 class AuthController extends Controller
 {    
     public function showLogin(){
@@ -14,20 +20,24 @@ class AuthController extends Controller
     }
 
     public function login(Request $request){
-        $credentials = $request->only('email', 'password');
+        $connection = Container::getConnection('default');
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
+        $credentials = [
+            'samaccountname' => $request->username,
+            'password' => $request->password,
+        ];
+
+        if (Auth::guard('web')->attempt($credentials)) {
+            $user = Auth::user();
+            // $ldapUser = LdapUser::findByGuid($user->guid);
+            dd($user);
+            
+        } elseif(Auth::guard('local')->attempt(['samaccountname' => $request->username,'password' => $request->password,])) {
+            $user = Auth::guard('local')->user();
+            dd($user);
         }
-
-        return response()->json(Auth::user());
-        // $credentials = $request->only('email', 'password');
-
-        // if (Auth::attempt($credentials)) {
-        //     return redirect()->route('dashboard');
-        // }
-
-        // return back()->withErrors(['email' => 'Credenciais inválidas']);
+        
+        return response()->json(['erro' => 'Usuário ou senha inválidos'], 401);
     }
 
     public function showRegister(){

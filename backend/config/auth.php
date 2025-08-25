@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'local' => [
+            'driver' => 'session',
+            'provider' => 'local_users', // fallback no banco
+        ],
     ],
 
     /*
@@ -60,7 +64,27 @@ return [
     */
 
     'providers' => [
+
         'users' => [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [
+                // App\Ldap\Rules\OnlyAdministrators::class, // Regra personalizada para permitir apenas administradores
+                // App\Ldap\Rules\OnlySmcit::class,
+            ],
+            'scopes' => [],
+            'database' => [
+                'model' => App\Models\User::class,
+                'sync_passwords' => true,
+                'sync_attributes' => [
+                    'name' => 'cn',
+                    'email' => 'mail',
+                    'samaccountname'   => 'samaccountname',
+                ],
+            ],
+        ],
+
+        'local_users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
